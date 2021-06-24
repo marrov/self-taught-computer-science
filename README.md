@@ -61,8 +61,8 @@ AO2 | [Cryptography I ](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mi
 
 ID Code | Courses | School | Duration | Prerequisites | Status
 :-- | :--: | :--: | :--: | :--: | :--:
-SO1 | [Build a Modern Computer from First Principles: From Nand to Tetris](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbuild-a-computer) | University of Jerusalem | 6 weeks | CSB1 | Not started
-SO2 | [Build a Modern Computer from First Principles: From Nand to Tetris II](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fnand2tetris2) | University of Jerusalem | 6 weeks | SO1 | Not started
+SO1 | [Build a Modern Computer from First Principles I](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbuild-a-computer) | University of Jerusalem | 6 weeks | CSB1 | Not started
+SO2 | [Build a Modern Computer from First Principles II](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fnand2tetris2) | University of Jerusalem | 6 weeks | SO1 | Not started
 SO3 | [Introduction to Operating Systems](https://imp.i115008.net/introduction-to-operating-systems)| Georgia Tech | 8 weeks | SO2 | Not started
 
 ## C++
