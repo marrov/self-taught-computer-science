@@ -1,6 +1,5 @@
 #include <cs50.h>
 #include <stdio.h>
-#include <math.h>
 
 int main(void)
 {
@@ -22,7 +21,6 @@ int main(void)
     while (end_size < start_size);
 
     // Calculate number of years until we reach threshold
-
     int years = 0;
 
     while (start_size < end_size)
