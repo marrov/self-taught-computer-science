@@ -1,0 +1,11 @@
+sort1 uses: bubble sort
+
+How do you know?: sort1 was considerably faster in the sorted list than in the others (i.e. random and reversed). The only algorithm that has distinct upper and lower bounds is bubble sort.
+
+sort2 uses: merge sort
+
+How do you know?: sort2 was considerably faster than the others (sort1 and sort3) and is roughly the same in all lists. The fastest algorithm is merge sort.
+
+sort3 uses: selection sort
+
+How do you know?: sort3 was much slower than sort2, so it cannot be merge, and has similar runtimes for all lists. So it has to be selection sort.
