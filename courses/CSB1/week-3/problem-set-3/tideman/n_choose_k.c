@@ -25,7 +25,13 @@ int main(void)
     printf("C(%i, %i) = %i\n", n, k, nck_factorial(n, k));
 }
 
-// Calculate binomial coefficients with recursion explicitly
+// Calculate binomial coefficients with recursion explicitly using additive formula
+int nck_recursive(int n, int k)
+{
+    // TODO: use (n k) = (n-1 k-1) + (n-1 k)
+}
+
+// Calculate binomial coefficients with recursion implicitly using factorials
 int nck_factorial(int n, int k)
 {
     return (fact(n)) / (fact(k) * fact(n - k));
