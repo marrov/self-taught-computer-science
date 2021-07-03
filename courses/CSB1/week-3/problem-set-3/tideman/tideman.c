@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <string.h>
 
 // Max number of candidates
 #define MAX 9
@@ -72,6 +73,12 @@ int main(int argc, string argv[])
         // ranks[i] is voter's ith preference
         int ranks[candidate_count];
 
+        // Initialize ranks to -1 to do vote checking
+        for (int k = 0; k < candidate_count; k++)
+        {
+            ranks[k] = -1;
+        }
+
         // Query for each rank
         for (int j = 0; j < candidate_count; j++)
         {
@@ -89,10 +96,12 @@ int main(int argc, string argv[])
         printf("\n");
     }
 
+    /*
     add_pairs();
     sort_pairs();
     lock_pairs();
     print_winner();
+    */
     return 0;
 }
 
@@ -100,6 +109,20 @@ int main(int argc, string argv[])
 bool vote(int rank, string name, int ranks[])
 {
     // TODO
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (strcmp(name, candidates[i]) == 0)
+        {
+            // Check if candidate has been already voted for
+            if (ranks[i] == -1)
+            {
+                ranks[i] = rank;
+                return true;
+            }
+            return false;
+        }
+    }
+
     return false;
 }
 
@@ -137,4 +160,3 @@ void print_winner(void)
     // TODO
     return;
 }
-
