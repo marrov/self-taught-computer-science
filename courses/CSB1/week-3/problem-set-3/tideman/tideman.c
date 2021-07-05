@@ -73,12 +73,6 @@ int main(int argc, string argv[])
         // ranks[i] is voter's ith preference
         int ranks[candidate_count];
 
-        // Initialize ranks to -1 to do vote checking
-        for (int k = 0; k < candidate_count; k++)
-        {
-            ranks[k] = -1;
-        }
-
         // Query for each rank
         for (int j = 0; j < candidate_count; j++)
         {
@@ -108,21 +102,25 @@ int main(int argc, string argv[])
 // Update ranks given a new vote
 bool vote(int rank, string name, int ranks[])
 {
-    // TODO
     for (int i = 0; i < candidate_count; i++)
     {
         if (strcmp(name, candidates[i]) == 0)
         {
-            // Check if candidate has been already voted for
-            if (ranks[i] == -1)
+            // Check if candidate has already been voted for
+            if (rank != 0)
             {
-                ranks[i] = rank;
-                return true;
+                for (int j = 0; j < rank; j++)
+                {
+                    if (strcmp(name, candidates[ranks[j]]) == 0)
+                    {
+                        return false;
+                    }
+                }
             }
-            return false;
+            ranks[rank] = i;
+            return true;
         }
     }
-
     return false;
 }
 
