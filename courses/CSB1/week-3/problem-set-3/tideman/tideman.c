@@ -34,6 +34,9 @@ void sort_pairs(void);
 void lock_pairs(void);
 void print_winner(void);
 
+// Debugging function prototypes
+void print_preferences(void);
+
 int main(int argc, string argv[])
 {
     // Check for invalid usage
@@ -127,7 +130,16 @@ bool vote(int rank, string name, int ranks[])
 // Update preferences given one voter's ranks
 void record_preferences(int ranks[])
 {
-    // TODO
+    // Use the ranked structure of ranks[] to loop through
+    // all candiates, for all other candidates which are not
+    // themselves nor have been chosen previously
+    for (int i = 0; i < candidate_count - 1; i++)
+    {
+        for (int j = i + 1; j < candidate_count; j++)
+        {
+            preferences[ranks[i][ranks[j]]++;
+        }
+    }
     return;
 }
 
@@ -157,4 +169,18 @@ void print_winner(void)
 {
     // TODO
     return;
+}
+
+void print_preferences(void)
+{
+    printf("\npreferences[i][j]\n");
+    int row, col;
+    for (row = 0; row < candidate_count; row++)
+    {
+        for (col = 0; col < candidate_count; col++)
+        {
+            printf("%d     ", preferences[row][col]);
+        }
+        printf("\n");
+    }
 }
