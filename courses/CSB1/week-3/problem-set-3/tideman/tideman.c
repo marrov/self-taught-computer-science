@@ -93,12 +93,15 @@ int main(int argc, string argv[])
         printf("\n");
     }
 
-    /*
+    print_preferences();
     add_pairs();
+
+    /*
     sort_pairs();
     lock_pairs();
     print_winner();
     */
+
     return 0;
 }
 
@@ -137,7 +140,7 @@ void record_preferences(int ranks[])
     {
         for (int j = i + 1; j < candidate_count; j++)
         {
-            preferences[ranks[i][ranks[j]]++;
+            preferences[ranks[i]][ranks[j]]++;
         }
     }
     return;
@@ -146,8 +149,24 @@ void record_preferences(int ranks[])
 // Record pairs of candidates where one is preferred over the other
 void add_pairs(void)
 {
-    // TODO
+    // Calculate count of all pairs using binomial coefficients
+    // This equal to all possible combinations obtained by
+    // chosing two candidates (a pair) from the total num of candidates
+    pair_count = bincoeff(candidate_count, 2)
     return;
+}
+
+// Calculate binomial coefficients with the multiplicative formula
+long bincoeff(int n, int k)
+{
+    if (n == k || k == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return bincoeff(n - 1, k - 1) + bincoeff(n - 1, k);
+    }
 }
 
 // Sort pairs in decreasing order by strength of victory
