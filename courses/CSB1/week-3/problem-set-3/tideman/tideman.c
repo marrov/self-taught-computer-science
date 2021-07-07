@@ -149,24 +149,44 @@ void record_preferences(int ranks[])
 // Record pairs of candidates where one is preferred over the other
 void add_pairs(void)
 {
-    // Calculate count of all pairs using binomial coefficients
-    // This equal to all possible combinations obtained by
-    // chosing two candidates (a pair) from the total num of candidates
-    pair_count = bincoeff(candidate_count, 2)
-    return;
-}
+    // Assuming at least two candiates, calculate the number of voters
+    int n_voters = preferences[1][0] + preferences[0][1];
 
-// Calculate binomial coefficients with the multiplicative formula
-long bincoeff(int n, int k)
-{
-    if (n == k || k == 0)
+    printf("\n");
+    for (int i = 1; i < candidate_count; i++)
     {
-        return 1;
+        for (int j = 0; j < i; j++)
+        {
+            // If no candidate is prefered over the other in the pair, do
+            // not add it to the pairs array. This can only happen if the
+            // number of voters is even
+            if (n_voters % 2 == 0)
+            {
+                // Check for ties in candidate preferences among the voters
+                if (preferences[i][j] == preferences[j][i])
+                {
+                    break;
+                }
+            }
+
+            // Update winner and loser in pair
+            printf("%i\n", preferences[i][j]);
+
+            if (preferences[i][j] > preferences[j][i])
+            {
+                pair.winner = i;
+                pair.loser  = j;
+                printf("Winner: %i, Loser: %i", i, j);
+            }
+            else
+            {
+                pair.winner = j;
+                pair.loser  = i;
+                printf("Winner: %i, Loser: %i", j, i);
+            }
+        }
     }
-    else
-    {
-        return bincoeff(n - 1, k - 1) + bincoeff(n - 1, k);
-    }
+    return;
 }
 
 // Sort pairs in decreasing order by strength of victory
@@ -198,7 +218,7 @@ void print_preferences(void)
     {
         for (col = 0; col < candidate_count; col++)
         {
-            printf("%d     ", preferences[row][col]);
+            printf("%i     ", preferences[row][col]);
         }
         printf("\n");
     }
