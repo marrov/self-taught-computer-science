@@ -1,8 +1,8 @@
 # Self-taught Computer Science Degree
 
-This repository will host my journey into self-teaching myself the knowledge required to obtain an undergraduate Computer Science degree.
+This repository will host my journey into self-teaching myself a computer science degree.
 
-Here is a curated list of free courses from reputable universities like MIT, Stanford, and Princeton that I will be following to satisfy the same requirements as an undergraduate Computer Science degree. The original repository from which mine has been based can be found [here](https://github.com/ForrestKnight/open-source-cs) and has been tweaked to my specific background and interests. All mathematics courses (calculus, linear algebra, statistics, etc) have not been included as they have been already covered by my previous studies (i.e. B.Sc. and M.Sc. in aerospace engineering).
+The following is a curated list of free courses from reputable universities like MIT, Stanford, and Princeton that I will be following to satisfy the same requirements as an undergraduate computer science degree. This repository has been based on others' work, which can be found [here](https://github.com/ForrestKnight/open-source-cs), [here](https://github.com/ossu/computer-science), and [here](https://teachyourselfcs.com/). Additionally, this roadmap to computer science has been tweaked to my specific background and interests. For instance, all mathematics courses (calculus, linear algebra, statistics, etc) have not been included as they have been already covered by my previous studies (i.e. B.Sc. and M.Sc. in aerospace engineering).
 
 ## Computer Science Basics
 
