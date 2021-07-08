@@ -11,7 +11,7 @@ int preferences[MAX][MAX];
 // locked[i][j] means i is locked in over j
 bool locked[MAX][MAX];
 
-// Each pair has a winner, loser
+// Each pair has a winner, loser and a strength
 typedef struct
 {
     int winner;
@@ -36,6 +36,7 @@ void print_winner(void);
 
 // Debugging function prototypes
 void print_preferences(void);
+void print_pairs_info(void);
 
 int main(int argc, string argv[])
 {
@@ -95,6 +96,7 @@ int main(int argc, string argv[])
 
     print_preferences();
     add_pairs();
+    print_pairs_info();
 
     /*
     sort_pairs();
@@ -149,40 +151,29 @@ void record_preferences(int ranks[])
 // Record pairs of candidates where one is preferred over the other
 void add_pairs(void)
 {
-    // Assuming at least two candiates, calculate the number of voters
-    int n_voters = preferences[1][0] + preferences[0][1];
-
-    printf("\n");
+    // Traverse only lower part of the preferences array (excluding diagonal)
     for (int i = 1; i < candidate_count; i++)
     {
         for (int j = 0; j < i; j++)
         {
-            // If no candidate is prefered over the other in the pair, do
-            // not add it to the pairs array. This can only happen if the
-            // number of voters is even
-            if (n_voters % 2 == 0)
+            // If there is a tie in preferences between two candidates
+            // do not generate a pair as there is no winner or loser
+            if (preferences[i][j] != preferences[j][i])
             {
-                // Check for ties in candidate preferences among the voters
-                if (preferences[i][j] == preferences[j][i])
+                // Update winner and loser in pair
+                if (preferences[i][j] > preferences[j][i])
                 {
-                    break;
+                    pairs[pair_count].winner = i;
+                    pairs[pair_count].loser  = j;
                 }
-            }
+                else
+                {
+                    pairs[pair_count].winner = j;
+                    pairs[pair_count].loser  = i;
+                }
 
-            // Update winner and loser in pair
-            printf("%i\n", preferences[i][j]);
-
-            if (preferences[i][j] > preferences[j][i])
-            {
-                pair.winner = i;
-                pair.loser  = j;
-                printf("Winner: %i, Loser: %i", i, j);
-            }
-            else
-            {
-                pair.winner = j;
-                pair.loser  = i;
-                printf("Winner: %i, Loser: %i", j, i);
+                // Update the global the pair count
+                pair_count++;
             }
         }
     }
@@ -210,9 +201,10 @@ void print_winner(void)
     return;
 }
 
+// Prints out preferences matrix for debugging purposes
 void print_preferences(void)
 {
-    printf("\npreferences[i][j]\n");
+    printf("preferences[i][j]:\n");
     int row, col;
     for (row = 0; row < candidate_count; row++)
     {
@@ -222,4 +214,19 @@ void print_preferences(void)
         }
         printf("\n");
     }
+    printf("\n");
+    return;
+}
+
+// Prints out info about pairs for debugging purposes
+void print_pairs_info(void)
+{
+    for (int i = 0; i < pair_count; i++)
+    {
+        printf("Pair number %i, ", i);
+        printf("Winner: %s, Loser: %s", candidates[pairs[i].winner], candidates[pairs[i].loser]);
+        printf(", by %i ", preferences[pairs[i].winner][pairs[i].loser]);
+        printf("to %i \n", preferences[pairs[i].loser][pairs[i].winner]);
+    }
+    return;
 }
