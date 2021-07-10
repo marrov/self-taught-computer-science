@@ -4,29 +4,31 @@
 
 // Global constants
 
-//#define len 6
-//int arr[len] = {5, 2, 1, 3, 6, 4};
+#define len 6
+int arr[len] = {5, 2, 1, 3, 6, 4};
 
-#define len 5
-int arr[len] = {5, 2, 1, 3, 6};
+//#define len 4
+//int arr[len] = {5, 2, 1, 3};
+
+// Is this extra array necessary?
+int srt[len] = {0};
 
 // Function prototypes
 void merge_sort(int fst, int lst);
-void print_array(void);
+void print_array(int array[]);
 
 int main(void)
 {
 
     printf("before:\n");
-    print_array();
+    print_array(arr);
 
     merge_sort(0, len - 1);
 
     printf("\nafter:\n");
-    print_array();
+    print_array(srt);
 }
 
-// Question: do I really need to pass the array???
 void merge_sort(int fst, int lst)
 {
     int mid;
@@ -66,14 +68,25 @@ void merge_sort(int fst, int lst)
     printf("\n");
     merge_sort(mid, lst);
 
+    // merge two halves (temporarily is a dummy print)
+    printf("\nMerging halves:\n");
+    printf("left  is %i to %i\n", arr[fst], arr[mid - 1]);
+    printf("right is %i to %i\n", arr[mid], arr[lst]);
+
+    // Merging pseudocode:
+    // 1) Compare first elem of left with first elem of right
+    // 2) Put highest in first non-ocuppied position
+    // 3) Pop out that element
+    // 4) Repeat until sorted
+
     return;
 }
 
-void print_array(void)
+void print_array(int array[])
 {
     for (int i = 0; i < len; i++)
     {
-        printf("%i ", arr[i]);
+        printf("%i ", array[i]);
     }
     printf("\n");
 }
