@@ -9,6 +9,7 @@ int arr[len] = {4, 5, 7, 1, 2, 8, 3, 9, 3, 6, 2, 6, 8, 1, 5, 3, 7, 9, 4, 1};
 
 // Function prototypes
 void merge_sort(int fst, int lst);
+void merge(int fst, int mid, int lst);
 void print_array(int array[], int n);
 
 int main(void)
@@ -35,13 +36,13 @@ void merge_sort(int fst, int lst)
     else if ((lst - fst + 1) % 2 == 0)
     {
         // Calculate midpoint if array longer than one
-        // and has even number of elements
+        // element and has even number of elements
         mid = (lst + fst + 1) / 2;
     }
     else
     {
         // Calculate midpoint if array longer than one
-        // and has odd number of elements
+        // element and has odd number of elements
         mid = (lst + fst) / 2;
     }
 
@@ -49,10 +50,18 @@ void merge_sort(int fst, int lst)
     merge_sort(fst, mid - 1);
     merge_sort(mid, lst);
 
+    // Merge both halves
+    merge(fst, mid, lst);
+
+    return;
+}
+
+void merge(int fst, int mid, int lst)
+{
     // Initialize two indexes, one for each half (left and right)
     int idx_l = 0, idx_r = 0;
 
-    // KEY TO FINISH: GET A VARIABLE SIZE ARRAY
+    // Initialize a temporary array of size equal to combined sizes of left and right
     int n_tmp = lst - fst + 1;
     int tmp[n_tmp];
     for (int i = 0; i < n_tmp; i++)
@@ -60,9 +69,9 @@ void merge_sort(int fst, int lst)
         tmp[i] = 0;
     }
 
+    // Loop for merging both halves
     for (int i = 0; i <= n_tmp; i++)
     {
-
         // Check if out of bounds
         if (fst + idx_l > mid - 1)
         {
@@ -96,12 +105,11 @@ void merge_sort(int fst, int lst)
         }
     }
 
-    // Copy items from temporary array to sorted array
+    // Copy items from temporary array to original array
     for (int i = 0; i < n_tmp; i++)
     {
         arr[fst + i] = tmp[i];
     }
-    return;
 }
 
 void print_array(int array[], int n)
