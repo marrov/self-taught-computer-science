@@ -22,6 +22,8 @@ pair;
 // Array of candidates
 string candidates[MAX];
 pair pairs[MAX * (MAX - 1) / 2];
+pair p_aux[MAX * (MAX - 1) / 2];
+
 
 int pair_count;
 int candidate_count;
@@ -31,12 +33,19 @@ bool vote(int rank, string name, int ranks[]);
 void record_preferences(int ranks[]);
 void add_pairs(void);
 void sort_pairs(void);
+void merge_sort(int fst, int lst);
+void merge(int fst, int mid, int lst);
 void lock_pairs(void);
 void print_winner(void);
 
 // Debugging function prototypes
 void print_preferences(void);
-void print_pairs_info(void);
+void print_pairs_info(pair pairs_arr[]);
+
+// Temporary! So that ported merge doesn't break
+#define len 20
+int arr[len] = {4, 5, 7, 1, 2, 8, 3, 9, 3, 6, 2, 6, 8, 1, 5, 3, 7, 9, 4, 1};
+int aux[len] = {0};
 
 int main(int argc, string argv[])
 {
@@ -96,10 +105,9 @@ int main(int argc, string argv[])
 
     print_preferences();
     add_pairs();
-    print_pairs_info();
+    sort_pairs();
 
     /*
-    sort_pairs();
     lock_pairs();
     print_winner();
     */
@@ -183,8 +191,99 @@ void add_pairs(void)
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
-    // TODO
+    // Initialize auxiliary pairs array
+    for (int i = 0; i < pair_count; i++)
+    {
+        p_aux[i] = pairs[i];
+    }
+
+    printf("Before merge sort:\n");
+    print_pairs_info(pairs);
+
+    merge_sort(0, pair_count);
+
+    // AFTER:
+    printf("\nAfter merge sort:\n");
+    print_pairs_info(pairs);
+
+
     return;
+}
+
+void merge_sort(int fst, int lst)
+{
+    // Check if array has only one element
+    if (fst == lst)
+    {
+        return;
+    }
+
+    // Calculate midpoint of the array
+    int mid = (lst + fst + 1) / 2;
+
+    // Sort left half, then sort right half
+    merge_sort(fst, mid - 1);
+    merge_sort(mid, lst);
+
+    // Merge both halves
+    merge(fst, mid, lst);
+
+    return;
+}
+
+void merge(int fst, int mid, int lst)
+{
+    // Initialize two indexes, one for each half (left and right)
+    int idx_l = 0, idx_r = 0;
+
+    // Set the auxiliary array size equal to combined sizes of left and right
+    int n_aux = lst - fst + 1;
+
+    // Loop for merging both halves into the auxiliary array
+    for (int i = 0; i <= n_aux; i++)
+    {
+        // Check if out of bounds
+        if (fst + idx_l > mid - 1)
+        {
+            // If out of bounds in left, copy all remaining items in right
+            for (int j = mid + idx_r; j <= lst; j++)
+            {
+                p_aux[i + (j - (mid + idx_r))] = pairs[j];
+            }
+            break;
+        }
+        else if (mid + idx_r > lst)
+        {
+            // If out of bounds in right, copy all remaining items in left
+            for (int j = fst + idx_l; j <= mid - 1; j++)
+            {
+                p_aux[i + (j - (fst + idx_l))] = pairs[j];
+            }
+            break;
+        }
+
+        // Define strength for left and right halves
+        int str_l = preferences[pairs[fst + idx_l].winner][pairs[fst + idx_l].loser];
+        int str_r = preferences[pairs[mid + idx_r].winner][pairs[mid + idx_r].loser];
+
+        // Compare strength in first item in left with strength with first item in right and copy the highest
+        if (str_l >= str_r)
+        {
+            p_aux[i] = pairs[fst + idx_l];
+            idx_l++;
+        }
+        else
+        {
+            p_aux[i] = pairs[mid + idx_r];
+            idx_r++;
+        }
+    }
+
+    // Update the original array with the contents of the auxiliary array
+    for (int i = 0; i < n_aux; i++)
+    {
+        pairs[fst + i] = p_aux[i];
+    }
 }
 
 // Lock pairs into the candidate graph in order, without creating cycles
@@ -219,14 +318,14 @@ void print_preferences(void)
 }
 
 // Prints out info about pairs for debugging purposes
-void print_pairs_info(void)
+void print_pairs_info(pair pairs_arr[])
 {
     for (int i = 0; i < pair_count; i++)
     {
         printf("Pair number %i, ", i);
-        printf("Winner: %s, Loser: %s", candidates[pairs[i].winner], candidates[pairs[i].loser]);
-        printf(", by %i ", preferences[pairs[i].winner][pairs[i].loser]);
-        printf("to %i \n", preferences[pairs[i].loser][pairs[i].winner]);
+        printf("Winner: %s, Loser: %s", candidates[pairs_arr[i].winner], candidates[pairs_arr[i].loser]);
+        printf(", by %i ", preferences[pairs_arr[i].winner][pairs_arr[i].loser]);
+        printf("to %i \n", preferences[pairs_arr[i].loser][pairs_arr[i].winner]);
     }
     return;
 }

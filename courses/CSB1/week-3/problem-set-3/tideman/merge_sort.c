@@ -3,7 +3,7 @@
 #include <string.h>
 
 // Global constants
-#define len 19
+#define len 20
 int arr[len] = {4, 5, 7, 1, 2, 8, 3, 9, 3, 6, 2, 6, 8, 1, 5, 3, 7, 9, 4, 1};
 int aux[len] = {0};
 
