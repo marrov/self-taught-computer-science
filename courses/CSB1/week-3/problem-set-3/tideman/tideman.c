@@ -22,9 +22,11 @@ pair;
 // Array of candidates
 string candidates[MAX];
 pair pairs[MAX * (MAX - 1) / 2];
+
+// Auxiliary array for merge sort
 pair p_aux[MAX * (MAX - 1) / 2];
 
-
+// Global count variables
 int pair_count;
 int candidate_count;
 
@@ -33,19 +35,17 @@ bool vote(int rank, string name, int ranks[]);
 void record_preferences(int ranks[]);
 void add_pairs(void);
 void sort_pairs(void);
-void merge_sort(int fst, int lst);
-void merge(int fst, int mid, int lst);
 void lock_pairs(void);
 void print_winner(void);
 
+// My own function prototypes
+void merge_sort(int fst, int lst);
+void merge(int fst, int mid, int lst);
+
 // Debugging function prototypes
 void print_preferences(void);
+void print_locked(void);
 void print_pairs_info(pair pairs_arr[]);
-
-// Temporary! So that ported merge doesn't break
-#define len 20
-int arr[len] = {4, 5, 7, 1, 2, 8, 3, 9, 3, 6, 2, 6, 8, 1, 5, 3, 7, 9, 4, 1};
-int aux[len] = {0};
 
 int main(int argc, string argv[])
 {
@@ -105,10 +105,12 @@ int main(int argc, string argv[])
 
     print_preferences();
     add_pairs();
+    print_pairs_info(pairs);
     sort_pairs();
+    print_pairs_info(pairs);
+    lock_pairs();
 
     /*
-    lock_pairs();
     print_winner();
     */
 
@@ -197,15 +199,8 @@ void sort_pairs(void)
         p_aux[i] = pairs[i];
     }
 
-    printf("Before merge sort:\n");
-    print_pairs_info(pairs);
-
+    // Sort pairs array with merge sort
     merge_sort(0, pair_count);
-
-    // AFTER:
-    printf("\nAfter merge sort:\n");
-    print_pairs_info(pairs);
-
 
     return;
 }
@@ -289,7 +284,20 @@ void merge(int fst, int mid, int lst)
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    // TODO
+    bool cycle = 0;
+    for (int i = 0; i < pair_count; i++)
+    {
+        if (!cycle)
+        {
+            // lock pair
+            locked[pairs[i].winner][pairs[i].loser] = 1;
+            print_locked();
+        }
+        else
+        {
+            break;
+        }
+    }
     return;
 }
 
@@ -317,6 +325,23 @@ void print_preferences(void)
     return;
 }
 
+// Prints out locked matrix for debugging purposes
+void print_locked(void)
+{
+    printf("locked[i][j]:\n");
+    int row, col;
+    for (row = 0; row < candidate_count; row++)
+    {
+        for (col = 0; col < candidate_count; col++)
+        {
+            printf("%i     ", locked[row][col]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    return;
+}
+
 // Prints out info about pairs for debugging purposes
 void print_pairs_info(pair pairs_arr[])
 {
@@ -327,5 +352,6 @@ void print_pairs_info(pair pairs_arr[])
         printf(", by %i ", preferences[pairs_arr[i].winner][pairs_arr[i].loser]);
         printf("to %i \n", preferences[pairs_arr[i].loser][pairs_arr[i].winner]);
     }
+    printf("\n");
     return;
 }
