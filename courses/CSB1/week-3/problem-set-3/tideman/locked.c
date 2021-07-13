@@ -24,10 +24,10 @@ int candidate_count;
 
 // Prototypes
 void lock_pairs(void);
-bool cycle(int src);
+bool cycle(int row, int col);
 void print_locked(void);
 
-int main (void)
+int main(void)
 {
     candidate_count = get_int("Number of candidates: ");
 
@@ -56,19 +56,41 @@ void lock_pairs(void)
 {
     for (int i = 0; i < pair_count; i++)
     {
+        // Initialize row and column variable for less verbosity
+        int row = pairs[i].winner;
+        int col = pairs[i].loser;
+
         // Check if there will be a cycle (can't happen if i = 0)
-        if (i == 0 || !cycle(i))
+        if (i == 0 || !cycle(row, col))
         {
-            // lock pair
-            locked[pairs[i].winner][pairs[i].loser] = 1;
+            // lock pair if no cycle
+            locked[row][col] = 1;
             print_locked();
         }
     }
     return;
 }
 
-bool cycle(int src)
+bool cycle(int row, int col)
 {
+    for (int i = 0; i < candidate_count; i++)
+    {
+        // Check if row idx at column j has a "true" element
+        if (locked[col][i])
+        {
+            // Check for cycle
+            if (i == row)
+            {
+                return true;
+            }
+            else
+            {
+                return cycle(row, i);
+            }
+        }
+    }
+
+    // Reaching here means that a row has no "true" elements, so no cycles are possible
     return false;
 }
 

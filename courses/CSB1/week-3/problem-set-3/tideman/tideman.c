@@ -41,6 +41,7 @@ void print_winner(void);
 // My own function prototypes
 void merge_sort(int fst, int lst);
 void merge(int fst, int mid, int lst);
+bool cycle(int idx);
 
 // Debugging function prototypes
 void print_preferences(void);
@@ -284,21 +285,57 @@ void merge(int fst, int mid, int lst)
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    bool cycle = 0;
     for (int i = 0; i < pair_count; i++)
     {
-        if (!cycle)
+        // Check if there will be a cycle (can't happen if i = 0)
+        if (i == 0 || !cycle(i))
         {
             // lock pair
             locked[pairs[i].winner][pairs[i].loser] = 1;
             print_locked();
         }
-        else
-        {
-            break;
-        }
     }
     return;
+}
+
+bool cycle(int src)
+{
+    int idx = pairs[src].loser;
+
+    for (int i = 0; i < candidate_count - 1; i++) // rows (not counting first)
+    {
+        for (int j = 0; j < candidate_count; j++) // columns
+        {
+            // Check if row idx at column j has a "true" element
+            if (locked[idx][j])
+            {
+                //printf("TRUE found at (%i, %i)\n", idx, j);
+
+                // Check if to "go to" of this "true" element goes to source row, making a cycle
+                if (j == pairs[src].winner)
+                {
+                    return true;
+                }
+                else
+                {
+                    // NOTE: this will only work if there is only one "true" in row!!!
+                    // HOW TO FIX???
+
+                    // If "true" leads to no cycle, update the idx
+                    idx = j;
+                }
+            }
+
+            // Reaching here means that a row has no "true" elements, so no cycles are possible
+            if (j == candidate_count - 1)
+            {
+                return false;
+            }
+        }
+    }
+
+    printf("\n");
+    return false;
 }
 
 // Print the winner of the election
