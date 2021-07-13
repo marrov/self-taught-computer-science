@@ -85,7 +85,10 @@ bool cycle(int row, int col)
             }
             else
             {
-                return cycle(row, i);
+                if (cycle(row, i))
+                {
+                    return true;
+                }
             }
         }
     }
