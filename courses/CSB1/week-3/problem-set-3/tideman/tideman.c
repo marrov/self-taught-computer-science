@@ -99,11 +99,8 @@ int main(int argc, string argv[])
         printf("\n");
     }
 
-    //print_preferences();
     add_pairs();
-    //print_pairs_info(pairs);
     sort_pairs();
-    //print_pairs_info(pairs);
     lock_pairs();
     print_winner();
 
