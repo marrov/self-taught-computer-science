@@ -42,12 +42,6 @@ void print_winner(void);
 void merge_sort(int fst, int lst);
 void merge(int fst, int mid, int lst);
 bool cycle(int row, int col);
-int find_source(int idx[], int n);
-
-// Debugging function prototypes
-void print_preferences(void);
-void print_locked(void);
-void print_pairs_info(pair pairs_arr[]);
 
 int main(int argc, string argv[])
 {
@@ -352,53 +346,5 @@ void print_winner(void)
             return;
         }
     }
-    return;
-}
-
-// Prints out preferences matrix for debugging purposes
-void print_preferences(void)
-{
-    printf("preferences[i][j]:\n");
-    int row, col;
-    for (row = 0; row < candidate_count; row++)
-    {
-        for (col = 0; col < candidate_count; col++)
-        {
-            printf("%i     ", preferences[row][col]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-    return;
-}
-
-// Prints out locked matrix for debugging purposes
-void print_locked(void)
-{
-    printf("locked[i][j]:\n");
-    int row, col;
-    for (row = 0; row < candidate_count; row++)
-    {
-        for (col = 0; col < candidate_count; col++)
-        {
-            printf("%i     ", locked[row][col]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-    return;
-}
-
-// Prints out info about pairs for debugging purposes
-void print_pairs_info(pair pairs_arr[])
-{
-    for (int i = 0; i < pair_count; i++)
-    {
-        printf("Pair number %i, ", i);
-        printf("Winner: %s, Loser: %s", candidates[pairs_arr[i].winner], candidates[pairs_arr[i].loser]);
-        printf(", by %i ", preferences[pairs_arr[i].winner][pairs_arr[i].loser]);
-        printf("to %i \n", preferences[pairs_arr[i].loser][pairs_arr[i].winner]);
-    }
-    printf("\n");
     return;
 }
