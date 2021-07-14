@@ -92,7 +92,6 @@ bool cycle(int row, int col)
             }
         }
     }
-
     // Reaching here means that a row has no "true" elements, so no cycles are possible
     return false;
 }

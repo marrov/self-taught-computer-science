@@ -41,7 +41,7 @@ void print_winner(void);
 // My own function prototypes
 void merge_sort(int fst, int lst);
 void merge(int fst, int mid, int lst);
-bool cycle(int idx);
+bool cycle(int row, int col);
 
 // Debugging function prototypes
 void print_preferences(void);
@@ -110,10 +110,7 @@ int main(int argc, string argv[])
     sort_pairs();
     print_pairs_info(pairs);
     lock_pairs();
-
-    /*
     print_winner();
-    */
 
     return 0;
 }
@@ -206,6 +203,7 @@ void sort_pairs(void)
     return;
 }
 
+// Recursive merge sort implementation
 void merge_sort(int fst, int lst)
 {
     // Check if array has only one element
@@ -227,6 +225,7 @@ void merge_sort(int fst, int lst)
     return;
 }
 
+// Performe the merge operation in merge sort
 void merge(int fst, int mid, int lst)
 {
     // Initialize two indexes, one for each half (left and right)
@@ -287,61 +286,116 @@ void lock_pairs(void)
 {
     for (int i = 0; i < pair_count; i++)
     {
+        // Initialize row and column variable for less verbosity
+        int row = pairs[i].winner;
+        int col = pairs[i].loser;
+
         // Check if there will be a cycle (can't happen if i = 0)
-        if (i == 0 || !cycle(i))
+        if (i == 0 || !cycle(row, col))
         {
-            // lock pair
-            locked[pairs[i].winner][pairs[i].loser] = 1;
+            // lock pair if no cycle
+            locked[row][col] = 1;
             print_locked();
         }
     }
     return;
 }
 
-bool cycle(int src)
+// Return true if adding "true" at (row, col) would produce a cycle, else return false
+bool cycle(int row, int col)
 {
-    int idx = pairs[src].loser;
-
-    for (int i = 0; i < candidate_count - 1; i++) // rows (not counting first)
+    for (int i = 0; i < candidate_count; i++)
     {
-        for (int j = 0; j < candidate_count; j++) // columns
+        // Check if row idx at column j has a "true" element
+        if (locked[col][i])
         {
-            // Check if row idx at column j has a "true" element
-            if (locked[idx][j])
+            // Check for cycle
+            if (i == row)
             {
-                //printf("TRUE found at (%i, %i)\n", idx, j);
-
-                // Check if to "go to" of this "true" element goes to source row, making a cycle
-                if (j == pairs[src].winner)
+                return true;
+            }
+            else
+            {
+                if (cycle(row, i))
                 {
                     return true;
                 }
-                else
-                {
-                    // NOTE: this will only work if there is only one "true" in row!!!
-                    // HOW TO FIX???
-
-                    // If "true" leads to no cycle, update the idx
-                    idx = j;
-                }
-            }
-
-            // Reaching here means that a row has no "true" elements, so no cycles are possible
-            if (j == candidate_count - 1)
-            {
-                return false;
             }
         }
     }
-
-    printf("\n");
+    // Reaching here means that a row has no "true" elements, so no cycles are possible
     return false;
 }
 
 // Print the winner of the election
 void print_winner(void)
 {
-    // TODO
+    // Initialize array to figure how many arrows pointing away from each candidate are there
+    int ones_in_row[candidate_count];
+
+    // Increment the count for each candidate for each "true" in its row
+    for (int i = 0; i < candidate_count; i++)
+    {
+        ones_in_row[i] = 0;
+
+        for (int j = 0; j < candidate_count; j++)
+        {
+            if (locked[i][j])
+            {
+                ones_in_row[i]++;
+            }
+        }
+    }
+
+    printf("ones in row:\n");
+    for (int i = 0; i < candidate_count; i++)
+    {
+        printf("%i ", ones_in_row[i]);
+    }
+    printf("\n\n");
+
+    // Initialize array with location of the max values
+    int idx[candidate_count - 1];
+    int max = 0;
+    int n_max = 1;
+
+    // Find max value
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (ones_in_row[i] > max)
+        {
+            max = ones_in_row[i];
+            idx[n_max - 1] = i;
+        }
+    }
+
+    // Find all locations of max value
+    for (int i = idx[n_max - 1] + 1; i < candidate_count; i++)
+    {
+        if (ones_in_row[i] == max)
+        {
+            n_max++;
+            idx[n_max - 1] = i;
+        }
+    }
+
+    printf("Max value:      %i\nAt position(s): ", max);
+    for (int i = 0; i < n_max; i++)
+    {
+        printf("%i ", idx[i]);
+    }
+    printf("\n\n");
+
+    printf("The winner of the election is:\n");
+
+    if (n_max == 1)
+    {
+        // If only one location has highest value of ones in rows of locked, print that candidate
+        printf("%s\n", candidates[idx[0]]);
+    }
+
+    // TO DO: if tie, code logic to decide winner (use cycle function, maybe?)
+
     return;
 }
 
