@@ -42,6 +42,7 @@ void print_winner(void);
 void merge_sort(int fst, int lst);
 void merge(int fst, int mid, int lst);
 bool cycle(int row, int col);
+int find_source(int idx[], int n);
 
 // Debugging function prototypes
 void print_preferences(void);
@@ -104,11 +105,11 @@ int main(int argc, string argv[])
         printf("\n");
     }
 
-    print_preferences();
+    //print_preferences();
     add_pairs();
-    print_pairs_info(pairs);
+    //print_pairs_info(pairs);
     sort_pairs();
-    print_pairs_info(pairs);
+    //print_pairs_info(pairs);
     lock_pairs();
     print_winner();
 
@@ -295,7 +296,6 @@ void lock_pairs(void)
         {
             // lock pair if no cycle
             locked[row][col] = 1;
-            print_locked();
         }
     }
     return;
@@ -327,75 +327,31 @@ bool cycle(int row, int col)
     return false;
 }
 
-// Print the winner of the election
+// Print the winner of the election, which is the candidate with no "true" elements in his/her column
+// because this signifies it has no arrows pointing at him/her (i.e. that is the source of the graph)
 void print_winner(void)
 {
-    // Initialize array to figure how many arrows pointing away from each candidate are there
-    int ones_in_row[candidate_count];
+    // Declare variable to keep track if there is a "true" element in the column
+    int one_in_col;
 
-    // Increment the count for each candidate for each "true" in its row
-    for (int i = 0; i < candidate_count; i++)
+    for (int i = 0; i < candidate_count; i++) // For each column
     {
-        ones_in_row[i] = 0;
-
-        for (int j = 0; j < candidate_count; j++)
+        // Initialize tracker to zero for each column
+        one_in_col =  0;
+        for (int j = 0; j < candidate_count; j++) // For each row
         {
-            if (locked[i][j])
+            if (locked[j][i])
             {
-                ones_in_row[i]++;
+                one_in_col = 1;
             }
         }
-    }
 
-    printf("ones in row:\n");
-    for (int i = 0; i < candidate_count; i++)
-    {
-        printf("%i ", ones_in_row[i]);
-    }
-    printf("\n\n");
-
-    // Initialize array with location of the max values
-    int idx[candidate_count - 1];
-    int max = 0;
-    int n_max = 1;
-
-    // Find max value
-    for (int i = 0; i < candidate_count; i++)
-    {
-        if (ones_in_row[i] > max)
+        if (!one_in_col)
         {
-            max = ones_in_row[i];
-            idx[n_max - 1] = i;
+            printf("%s\n", candidates[i]);
+            return;
         }
     }
-
-    // Find all locations of max value
-    for (int i = idx[n_max - 1] + 1; i < candidate_count; i++)
-    {
-        if (ones_in_row[i] == max)
-        {
-            n_max++;
-            idx[n_max - 1] = i;
-        }
-    }
-
-    printf("Max value:      %i\nAt position(s): ", max);
-    for (int i = 0; i < n_max; i++)
-    {
-        printf("%i ", idx[i]);
-    }
-    printf("\n\n");
-
-    printf("The winner of the election is:\n");
-
-    if (n_max == 1)
-    {
-        // If only one location has highest value of ones in rows of locked, print that candidate
-        printf("%s\n", candidates[idx[0]]);
-    }
-
-    // TO DO: if tie, code logic to decide winner (use cycle function, maybe?)
-
     return;
 }
 
