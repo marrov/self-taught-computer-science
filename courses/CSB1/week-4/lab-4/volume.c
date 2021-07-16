@@ -39,28 +39,22 @@ int main(int argc, char *argv[])
     // Initialize header
     uint8_t header[HEADER_SIZE];
 
-    // Reader header from input
-    // size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
-    // This function reads data from a file that has been opened via fopen. It expects as input:
-    //  ptr, which is the address (of the first byte) of memory into which to read the data,
-    //  size, which is the size (in bytes) of the type of data to read,
-    //  nmemb, which is the number of those types to read at once, and
-    //  stream, which is the pointer to a FILE returned by fopen.
-    //For instance, if reading one char at a time, size would be sizeof(char) (i.e., 1), and nmemb would be 1.
+    // Read header from input
+    fread(&header, sizeof(uint8_t), HEADER_SIZE, input);
 
-    // Write heeader to output
-    // size_t fwrite(void *ptr, size_t size, size_t nmemb, FILE *stream);
-    // This function writes data to a file that has been opened via fopen. It expects as input:
-    //  ptr, which is the address (of the first byte) of memory from which to read the data,
-    //  size, which is the size (in bytes) of the type of data to write,
-    //  nmemb, which is the number of those types to write at once, and
-    //  stream, which is the pointer to a FILE returned by fopen.
-    // For instance, if writing one char at a time, size would be sizeof(char) (i.e., 1), and nmemb would be 1.
+    // Write header to output
+    fwrite(&header, sizeof(uint8_t), HEADER_SIZE, output);
 
     //Read samples from input file and write updated data to output file
     int16_t buffer;
 
-    // Close files
+    while (fread(&buffer, sizeof(int16_t), 1, input))
+    {
+        buffer *= factor;
+        fwrite(&buffer, sizeof(int16_t), 1, output);
+    }
+
+    // Close files and free memory
     fclose(input);
     fclose(output);
 }
