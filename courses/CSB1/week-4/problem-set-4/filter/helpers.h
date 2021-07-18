@@ -12,5 +12,3 @@ void edges(int height, int width, RGBTRIPLE image[height][width]);
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width]);
 
-// Average RGB colors in pixel as nearest int
-int avg_rbg(RGBTRIPLE pixel);
