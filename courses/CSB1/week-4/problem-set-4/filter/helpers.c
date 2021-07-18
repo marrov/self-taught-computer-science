@@ -1,6 +1,15 @@
 #include "helpers.h"
-#include <stdio.h>
-#include <stdlib.h>
+
+// Filter prototypes
+void grayscale(int height, int width, RGBTRIPLE image[height][width]);
+void reflect(int height, int width, RGBTRIPLE image[height][width]);
+void edges(int height, int width, RGBTRIPLE image[height][width]);
+void blur(int height, int width, RGBTRIPLE image[height][width]);
+
+// My function prototypes
+int avg_rbg(RGBTRIPLE pixel);
+void swap(RGBTRIPLE *pixel_a, RGBTRIPLE *pixel_b);
+
 
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width])
@@ -24,32 +33,14 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
 // Reflect image horizontally
 void reflect(int height, int width, RGBTRIPLE image[height][width])
 {
-    for (int i = 0; i < 1; i++) // for each row
+    for (int i = 0; i < height; i++) // for each row
     {
-        for (int j = 0; j < 1; j++) // for each column until the middle
+        for (int j = 0, mid = (width + 1) / 2; j < mid; j++) // for each column until the middle
         {
-            int temp;
+            swap(&image[i][j], &image[i][width - 1 - j]);
         }
     }
-
-    // Swap left and right pixel
-    image[0][0].rgbtRed   = 255;
-    image[0][0].rgbtBlue  = 0;
-    image[0][0].rgbtGreen = 0;
-
-    image[0][599].rgbtRed   = 0;
-    image[0][599].rgbtBlue  = 255;
-    image[0][599].rgbtGreen = 0;
-
-    image[1][0].rgbtRed   = 0;
-    image[1][0].rgbtBlue  = 0;
-    image[1][0].rgbtGreen = 255;
-
-    printf("Height: %i px\nWidth: %i px\n", height, width);
-
-    //swap(&image[0][0], &image[0][width])
-
-return;
+    return;
 }
 
 // Blur image
@@ -67,13 +58,13 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 // Average RGB colors (always positive) as nearest int using type casting
 int avg_rbg(RGBTRIPLE pixel)
 {
-    return (pixel.rgbtRed + pixel.rgbtBlue + pixel.rgbtGreen) / 3.0 + 0.5;
+    return (pixel.rgbtRed + pixel.rgbtGreen + pixel.rgbtBlue) / 3.0 + 0.5;
 }
 
 // Swap pixel positions
-void swap(RGBTRIPLE* a, RGBTRIPLE* b)
+void swap(RGBTRIPLE *pixel_a, RGBTRIPLE *pixel_b)
 {
-    RGBTRIPLE tmp = *a;
-    *a = *b;
-    *b = tmp;
+    RGBTRIPLE tmp = *pixel_a;
+    *pixel_a = *pixel_b;
+    *pixel_b = tmp;
 }
