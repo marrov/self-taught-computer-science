@@ -46,10 +46,33 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
+
+    // Loop through non-boundary elements
+    for (int i = 1; i < height - 1; i++)
+    {
+        for (int j = 1; j < width - 1; j++)
+        {
+            int red = 0, green = 0, blue = 0;
+
+            for (int x = -1; x < 2; x++)
+            {
+                for (int y = -1; y < 2; y++)
+                {
+                    red   += image[i + x][j + y].rgbtRed;
+                    green += image[i + x][j + y].rgbtGreen;
+                    blue  += image[i + x][j + y].rgbtBlue;
+                }
+            }
+
+            image[i][j].rgbtRed   = red   / 9.0 + 0.5;
+            image[i][j].rgbtGreen = green / 9.0 + 0.5;
+            image[i][j].rgbtBlue  = blue  / 9.0 + 0.5;
+        }
+    }
     return;
 }
 
-// Detect edges
+// Highlight edges
 void edges(int height, int width, RGBTRIPLE image[height][width])
 {
     return;
