@@ -9,8 +9,10 @@ void edges(int height, int width, RGBTRIPLE image[height][width]);
 void blur(int height, int width, RGBTRIPLE image[height][width]);
 
 // My function prototypes
-int avg_rbg(RGBTRIPLE pixel);
+int iavg(float sum, float n);
 void swap(RGBTRIPLE *pixel_a, RGBTRIPLE *pixel_b);
+void set_pixel(RGBTRIPLE *pixel, int red, int green, int blue);
+void sum_pixel_colors(RGBTRIPLE *pixel, float *sum_red, float* sum_green, float* sum_blue);
 
 
 // Convert image to grayscale
@@ -20,13 +22,13 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++) // for each column element
         {
-            // Calculate RBG average as nearest integer
-            int iavg = avg_rbg(image[i][j]);
+            // Calculate average of all colors of pixel
+            float num_colors = 3.0;
+            float sum_colors = image[i][j].rgbtRed + image[i][j].rgbtGreen + image[i][j].rgbtBlue;
+            int   avg_colors = iavg(sum_colors, num_colors);
 
-            // Set RGB pixel colors as integer average
-            image[i][j].rgbtRed   = iavg;
-            image[i][j].rgbtGreen = iavg;
-            image[i][j].rgbtBlue  = iavg;
+            // Set RGB pixel colors as average
+            set_pixel(&image[i][j], avg_colors, avg_colors, avg_colors);
         }
     }
     return;
@@ -57,83 +59,64 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             float red = 0, green = 0, blue = 0;
 
             // Always add the center pixel
-            red   += image[i][j].rgbtRed;
-            green += image[i][j].rgbtGreen;
-            blue  += image[i][j].rgbtBlue;
+            sum_pixel_colors(&image[i][j], &red, &green, &blue);
             n++;
 
             // Check if each of the neighbours exists, then add it and keep count
             if (i - 1 >= 0) // N
             {
-                red   += image[i - 1][j].rgbtRed;
-                green += image[i - 1][j].rgbtGreen;
-                blue  += image[i - 1][j].rgbtBlue;
+                sum_pixel_colors(&image[i - 1][j], &red, &green, &blue);
                 n++;
             }
 
             if (i - 1 >= 0 && j - 1 >= 0) // NW
             {
-                red   += image[i - 1][j - 1].rgbtRed;
-                green += image[i - 1][j - 1].rgbtGreen;
-                blue  += image[i - 1][j - 1].rgbtBlue;
+                sum_pixel_colors(&image[i - 1][j - 1], &red, &green, &blue);
                 n++;
             }
 
             if (i - 1 >= 0 && j + 1 <= width - 1) // NE
             {
-                red   += image[i - 1][j + 1].rgbtRed;
-                green += image[i - 1][j + 1].rgbtGreen;
-                blue  += image[i - 1][j + 1].rgbtBlue;
+                sum_pixel_colors(&image[i - 1][j + 1], &red, &green, &blue);
                 n++;
             }
 
             if (j - 1 >= 0) // W
             {
-                red   += image[i][j - 1].rgbtRed;
-                green += image[i][j - 1].rgbtGreen;
-                blue  += image[i][j - 1].rgbtBlue;
+                sum_pixel_colors(&image[i][j - 1], &red, &green, &blue);
                 n++;
             }
 
             if (j + 1 <= width - 1) // E
             {
-                red   += image[i][j + 1].rgbtRed;
-                green += image[i][j + 1].rgbtGreen;
-                blue  += image[i][j + 1].rgbtBlue;
+                sum_pixel_colors(&image[i][j + 1], &red, &green, &blue);
                 n++;
             }
 
             if (i + 1 <= height - 1) // S
             {
-                red   += image[i + 1][j].rgbtRed;
-                green += image[i + 1][j].rgbtGreen;
-                blue  += image[i + 1][j].rgbtBlue;
+                sum_pixel_colors(&image[i + 1][j], &red, &green, &blue);
                 n++;
             }
 
             if (i + 1 <= height - 1 && j - 1 >= 0) // SW
             {
-                red   += image[i + 1][j - 1].rgbtRed;
-                green += image[i + 1][j - 1].rgbtGreen;
-                blue  += image[i + 1][j - 1].rgbtBlue;
+                sum_pixel_colors(&image[i + 1][j - 1], &red, &green, &blue);
                 n++;
             }
 
             if (i + 1 <= height - 1 && j + 1 <= width - 1) // SE
             {
-                red   += image[i + 1][j + 1].rgbtRed;
-                green += image[i + 1][j + 1].rgbtGreen;
-                blue  += image[i + 1][j + 1].rgbtBlue;
+                sum_pixel_colors(&image[i + 1][j + 1], &red, &green, &blue);
                 n++;
             }
 
-            blured[i][j].rgbtRed   = round(red   / n);
-            blured[i][j].rgbtGreen = round(green / n);
-            blured[i][j].rgbtBlue  = round(blue  / n);
+            // Set
+            set_pixel(&blured[i][j], iavg(red, n), iavg(green, n), iavg(blue, n));
         }
     }
 
-    // Copy elements of blur to image
+    // Copy elements of blured to image
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -151,10 +134,10 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
     return;
 }
 
-// Average RGB colors (always positive) as nearest int using type casting
-int avg_rbg(RGBTRIPLE pixel)
+// Average by dividing sum over number of elements as nearest int using round()
+int iavg(float sum, float n)
 {
-    return (pixel.rgbtRed + pixel.rgbtGreen + pixel.rgbtBlue) / 3.0 + 0.5;
+    return round(sum / n);
 }
 
 // Swap pixel positions
@@ -163,4 +146,20 @@ void swap(RGBTRIPLE *pixel_a, RGBTRIPLE *pixel_b)
     RGBTRIPLE tmp = *pixel_a;
     *pixel_a = *pixel_b;
     *pixel_b = tmp;
+}
+
+// Set colors of pixel
+void set_pixel(RGBTRIPLE *pixel, int red, int green, int blue)
+{
+    pixel->rgbtRed   = red;
+    pixel->rgbtGreen = green;
+    pixel->rgbtBlue  = blue;
+}
+
+// Update cumulative sum of red, green and blue from colors of pixel
+void sum_pixel_colors(RGBTRIPLE *pixel, float *sum_red, float* sum_green, float* sum_blue)
+{
+    *sum_red   += pixel->rgbtRed;
+    *sum_green += pixel->rgbtGreen;
+    *sum_blue  += pixel->rgbtBlue;
 }
