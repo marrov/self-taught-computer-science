@@ -1,4 +1,5 @@
 #include "helpers.h"
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
@@ -12,7 +13,8 @@ void blur(int height, int width, RGBTRIPLE image[height][width]);
 int iavg(float sum, float n);
 void swap(RGBTRIPLE *pixel_a, RGBTRIPLE *pixel_b);
 void set_pixel(RGBTRIPLE *pixel, int red, int green, int blue);
-void sum_pixel_colors(RGBTRIPLE *pixel, float *sum_red, float* sum_green, float* sum_blue);
+void sum_pixel_colors(RGBTRIPLE *pixel, float *sum_red, float* sum_green, float* sum_blue, float* n);
+void copy_image(int height, int width, RGBTRIPLE img_a[height][width], RGBTRIPLE img_b[height][width]);
 
 
 // Convert image to grayscale
@@ -49,81 +51,57 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
-    RGBTRIPLE blured[height][width];
+    // Allocate memory for copy of image to blur pixels to
+    RGBTRIPLE(*blured)[width] = calloc(height, width * sizeof(RGBTRIPLE));
+    if (blured == NULL)
+    {
+        fprintf(stderr, "Not enough memory to store copy of image for blurring.\n");
+        free(blured);
+        return;
+    }
 
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            float n = 0; // Count for number of neighbouring pixels to make average from
-            float red = 0, green = 0, blue = 0;
+            // Count and sum variables to keep track of RGB channels' sum and count of valid neighbours
+            float n = 0, red = 0, green = 0, blue = 0;
 
-            // Always add the center pixel
-            sum_pixel_colors(&image[i][j], &red, &green, &blue);
-            n++;
+            // Always add the center pixel colors to the sum
+            sum_pixel_colors(&image[i][j], &red, &green, &blue, &n);
 
-            // Check if each of the neighbours exists, then add it and keep count
+            // Check if each of the 8 neighbours exists, then add it to sum and keep count of valid neigbours
             if (i - 1 >= 0) // N
-            {
-                sum_pixel_colors(&image[i - 1][j], &red, &green, &blue);
-                n++;
-            }
+                sum_pixel_colors(&image[i - 1][j], &red, &green, &blue, &n);
 
             if (i - 1 >= 0 && j - 1 >= 0) // NW
-            {
-                sum_pixel_colors(&image[i - 1][j - 1], &red, &green, &blue);
-                n++;
-            }
+                sum_pixel_colors(&image[i - 1][j - 1], &red, &green, &blue, &n);
 
             if (i - 1 >= 0 && j + 1 <= width - 1) // NE
-            {
-                sum_pixel_colors(&image[i - 1][j + 1], &red, &green, &blue);
-                n++;
-            }
+                sum_pixel_colors(&image[i - 1][j + 1], &red, &green, &blue, &n);
 
             if (j - 1 >= 0) // W
-            {
-                sum_pixel_colors(&image[i][j - 1], &red, &green, &blue);
-                n++;
-            }
+                sum_pixel_colors(&image[i][j - 1], &red, &green, &blue, &n);
 
             if (j + 1 <= width - 1) // E
-            {
-                sum_pixel_colors(&image[i][j + 1], &red, &green, &blue);
-                n++;
-            }
+                sum_pixel_colors(&image[i][j + 1], &red, &green, &blue, &n);
 
             if (i + 1 <= height - 1) // S
-            {
-                sum_pixel_colors(&image[i + 1][j], &red, &green, &blue);
-                n++;
-            }
+                sum_pixel_colors(&image[i + 1][j], &red, &green, &blue, &n);
 
             if (i + 1 <= height - 1 && j - 1 >= 0) // SW
-            {
-                sum_pixel_colors(&image[i + 1][j - 1], &red, &green, &blue);
-                n++;
-            }
+                sum_pixel_colors(&image[i + 1][j - 1], &red, &green, &blue, &n);
 
             if (i + 1 <= height - 1 && j + 1 <= width - 1) // SE
-            {
-                sum_pixel_colors(&image[i + 1][j + 1], &red, &green, &blue);
-                n++;
-            }
+                sum_pixel_colors(&image[i + 1][j + 1], &red, &green, &blue, &n);
 
-            // Set
+            // Set each RGB pixel color to the RBG average of its valid neigbours
             set_pixel(&blured[i][j], iavg(red, n), iavg(green, n), iavg(blue, n));
         }
     }
 
     // Copy elements of blured to image
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width; j++)
-        {
-            image[i][j] = blured[i][j];
-        }
-    }
+    copy_image(height, width, image, blured);
 
     return;
 }
@@ -157,9 +135,22 @@ void set_pixel(RGBTRIPLE *pixel, int red, int green, int blue)
 }
 
 // Update cumulative sum of red, green and blue from colors of pixel
-void sum_pixel_colors(RGBTRIPLE *pixel, float *sum_red, float* sum_green, float* sum_blue)
+void sum_pixel_colors(RGBTRIPLE *pixel, float *sum_red, float* sum_green, float* sum_blue, float* n)
 {
     *sum_red   += pixel->rgbtRed;
     *sum_green += pixel->rgbtGreen;
     *sum_blue  += pixel->rgbtBlue;
+    (*n)++;
+}
+
+// Copy contents of one image to another for two identically sized images
+void copy_image(int height, int width, RGBTRIPLE img_a[height][width], RGBTRIPLE img_b[height][width])
+{
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            img_a[i][j] = img_b[i][j];
+        }
+    }
 }
