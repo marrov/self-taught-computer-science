@@ -39,7 +39,8 @@ int main(void)
 // Create a new individual with `generations`
 person *create_family(int generations)
 {
-    // TODO: Allocate memory for new person
+    // Allocate memory for new person
+    //person *youngest = malloc(sizeof(person));
 
     // Generation with parent data
     if (generations > 1)
@@ -64,11 +65,18 @@ person *create_family(int generations)
 // Free `p` and all ancestors of `p`.
 void free_family(person *p)
 {
-    // TODO: Handle base case
+    // Handle base case
+    if (p == NULL)
+    {
+        return;
+    }
 
-    // TODO: Free parents
+    // Free parents
+    free_family(p->parents[0]);
+    free_family(p->parents[1]);
 
-    // TODO: Free child
+    // Free child
+    free(p);
 }
 
 // Print each family member and their alleles.
