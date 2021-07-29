@@ -39,6 +39,7 @@ unsigned int hash(const char *word)
     return toupper(word[0]) - 'A';
 
     /*
+    // NOTE: IS IT CASE-INSENSITIVE???
     // Second attemp: djb2 from http://www.cse.yorku.ca/~oz/hash.html
     int c;
     unsigned int hash = 5381;
@@ -89,8 +90,6 @@ bool load(const char *dictionary)
         dictword->next = table[hashidx];
         table[hashidx] = dictword;
 
-        printf("%u \t %s \n", hashidx, table[hashidx]->word);
-
         // Update count of words in dictionary
         N_WORDS++;
     }
@@ -98,7 +97,7 @@ bool load(const char *dictionary)
     // Close files and free memory
     fclose(dictfile);
 
-    return false;
+    return true;
 }
 
 // Returns number of words in dictionary if loaded, else 0 if not yet loaded
@@ -110,6 +109,19 @@ unsigned int size(void)
 // Unloads dictionary from memory, returning true if successful, else false
 bool unload(void)
 {
-    // TODO
-    return false;
+    for (int i = 0; i < N; i++) // For each element in the hash table array
+    {
+        // Free the linked list associcated with that array position
+        while (table[i] != NULL)
+        {
+            // Store pointer to next node
+            node *tmp = table[i]->next;
+            // Free node at the list's head
+            free(table[i]);
+            // Make list point at next node
+            table[i] = tmp;
+        }
+    }
+
+    return true;
 }
