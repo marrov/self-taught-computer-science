@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <strings.h>
 #include <stdbool.h>
 #include "dictionary.h"
 
@@ -15,8 +16,8 @@ typedef struct node
 }
 node;
 
-// Number of buckets in hash table (N ~ sqrt(N_WORDS))
-const unsigned int N = 26; // 378
+// Number of buckets in hash table
+const unsigned int N = 10000;
 
 // Hash table
 // NB: global variables are automatically initialized to zero (i.e NULL for pointers)
@@ -28,7 +29,19 @@ int N_WORDS = 0;
 // Returns true if word is in dictionary, else false
 bool check(const char *word)
 {
-    // TODO
+    // Hash word to obtain hash value to use as index
+    unsigned int hashidx = hash(word);
+
+    // Traverse the linked list on the hash table location given by the index
+    for (node *tmp = table[hashidx]; tmp != NULL; tmp = tmp->next)
+    {
+        // Compare strings, case-insentiviely
+        if (strcasecmp(word, tmp->word) == 0)
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -36,21 +49,18 @@ bool check(const char *word)
 unsigned int hash(const char *word)
 {
     // First attempt: simple first letter in word hash function
-    return toupper(word[0]) - 'A';
+    // return toupper(word[0]) - 'A';
 
-    /*
-    // NOTE: IS IT CASE-INSENSITIVE???
     // Second attemp: djb2 from http://www.cse.yorku.ca/~oz/hash.html
-    int c;
-    unsigned int hash = 5381;
+    // This is a case-insensitive implementation of djb2
+    unsigned long hash = 5381;
 
-    while ((c = *word++))
+    for (const char* c = word; *c != '\0'; c++)
     {
-        hash = ((hash << 5) + hash) + c;
+        hash = ((hash << 5) + hash) + toupper(*c);
     }
 
     return hash % N;
-    */
 }
 
 // Loads dictionary into memory, returning true if successful, else false
