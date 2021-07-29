@@ -55,7 +55,7 @@ unsigned int hash(const char *word)
     // This is a case-insensitive implementation of djb2
     unsigned long hash = 5381;
 
-    for (const char* c = word; *c != '\0'; c++)
+    for (const char *c = word; *c != '\0'; c++)
     {
         hash = ((hash << 5) + hash) + toupper(*c);
     }
