@@ -1,13 +1,13 @@
 from cs50 import get_int
 
-def draw_pyramid(h):
+def draw_pyramid(h, htotal):
     """Draws a mario pyramid of height h recursively."""
     if h == 1: # Base case
-        print('#')
+        print(' ' * (htotal - h) + '#' + '  ' + '#')
         return
     else: # Recursive case
-        draw_pyramid(h - 1)
-        print('#' * h)
+        draw_pyramid(h - 1, htotal)
+        print(' ' * (htotal - h) + '#' * h + '  ' + '#' * h)
         return
 
 if __name__ == "__main__":
@@ -16,5 +16,4 @@ if __name__ == "__main__":
         if height >= 1 and height <= 8:
             break
 
-    print(f'You chose a height of {height}')
-    draw_pyramid(height)
+    draw_pyramid(height, height)
