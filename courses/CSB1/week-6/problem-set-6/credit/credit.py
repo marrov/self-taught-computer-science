@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import re
 
 def main():
