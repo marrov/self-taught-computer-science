@@ -1,24 +1,20 @@
-import re
-
 def main():
-    # TODO: ask user for input
-    num = get_int("Number: ")
+    num = input("Number: ")
 
-    # TODO: Use re to find AMEX, MASTERCARD, VISA or invalid
-    if num == 1:
-        # AMEX
-    elif num == 2:
-        # MASTERCARD
-    elif num == 3:
-        # VISA
+    if len(num) == 15 and (num[0:2] == "34" or num[0:2] == "37"):
+        print("AMEX")
+    elif len(num) == 16 and (int(num[0:2]) >= 51 and int(num[0:2]) <= 55):
+        print("MASTERCARD")
+    elif (len(num) == 13 or len(num) == 16) and num[0] == "4":
+        print("VISA")
     else:
-        # invalid
+        print("INVALID")
 
     # TODO: if not invalid, use Lunh's algorithm to check if valid
 
     return
 
-def luhn(num)
+def luhn(num):
     return true
 
 if __name__ == "__main__":
