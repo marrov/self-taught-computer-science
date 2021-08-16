@@ -1,6 +1,6 @@
 def main():
-    # TODO: get text as string from user
-    text = get_text()
+    # Get text as string from user
+    text = get_string("Text: ")
 
     # TODO: Calculate the Coleman-Liau index of the text
     cli = compute_cli(text)
@@ -8,31 +8,22 @@ def main():
     # TODO: print the grade-level readability of the text
     print_readability(cli)
 
-def get_text(text):
-    return
 
 def compute_cli(text):
-    # TODO: count letters in text
-    n_letters = count_letters(text)
+    """Calculate the Coleman-Liau index"""
 
-    # TODO: count words in text
-    n_words = count_words(text)
+    # TODO: n_letters = regex expression
 
-    # TODO: count sentences in text
-    n_sentences = count_sentences(string text)
+    # TODO: n_words = regex expression
 
-    return
+    # TODO: n_sentences = regex expression
 
-def count_letters(text):
-    return
+    return 0
 
-def count_words(text):
-    return
-
-def count_sentences(string text):
-    return
 
 def print_readability(cli):
+    """Print out the grade level based on the CL index"""
+
     return
 
 if __name__ == "__main__":
