@@ -16,11 +16,14 @@ def main():
 def compute_cli(text):
     """Calculate the Coleman-Liau index"""
 
-    # TODO: n_letters = regex expression
+    # Count letters in text
+    n_letters = len(re.findall('[A-Za-z]', text))
 
-    # TODO: n_words = regex expression
+    # Count words in text
+    n_words = len(re.findall('[ ]', text)) + 1
 
-    # TODO: n_sentences = regex expression
+    # Count sentences in text
+    n_sentences = len(re.findall('[.!?]', text))
 
     return 0
 
