@@ -28,7 +28,12 @@ def compute_cli(text):
 def print_readability(cli):
     """Print out the grade level based on the CL index"""
 
-    return
+    if cli < 1:
+        print("Before Grade 1")
+    elif (cli > 16):
+        print("Grade 16+")
+    else:
+        print(f"Grade {cli}")
 
 if __name__ == "__main__":
     main()
