@@ -1,3 +1,7 @@
+import re
+from cs50 import get_string
+
+
 def main():
     # Get text as string from user
     text = get_string("Text: ")
