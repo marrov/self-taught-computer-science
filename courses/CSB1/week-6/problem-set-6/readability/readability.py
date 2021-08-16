@@ -25,7 +25,16 @@ def compute_cli(text):
     # Count sentences in text
     n_sentences = len(re.findall('[.!?]', text))
 
-    return 0
+    # Calculate L average number of letters per 100 words
+    l = 100 * n_letters / n_words;
+
+    # Calculate S average number of letters per 100 words
+    s = 100 * n_sentences / n_words;
+
+    # Compute formula
+    cli = int(round(0.0588 * l - 0.296 * s - 15.8));
+
+    return cli
 
 
 def print_readability(cli):
