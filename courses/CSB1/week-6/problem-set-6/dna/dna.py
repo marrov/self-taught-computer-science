@@ -1,9 +1,14 @@
+# Simulate DNA matching
+
 import csv
 import sys
 
 
 def main():
-    # TODO: Check for correct usage
+
+    # Check for correct usage
+    if len(sys.argv) != 3:
+        sys.exit("Usage: python dna.py data.csv sequence.txt")
 
     # TODO: Open the CSV file and read into memory
 
