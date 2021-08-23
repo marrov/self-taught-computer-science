@@ -10,7 +10,12 @@ def main():
     if len(sys.argv) != 3:
         sys.exit("Usage: python dna.py data.csv sequence.txt")
 
-    # TODO: Open the CSV file and read into memory
+    # Open the CSV file and read into memory
+    database = []
+    with open(sys.argv[1], "r") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            database.append(row)
 
     # TODO: Open the DNA sequence and read into memory.
 
