@@ -17,6 +17,8 @@ def main():
         for row in reader:
             database.append(row)
 
+    keys = list(database[10)
+
     # TODO: Open the DNA sequence and read into memory.
 
     # TODO: For each of the STRs (from CSV file), compute the longest run of
