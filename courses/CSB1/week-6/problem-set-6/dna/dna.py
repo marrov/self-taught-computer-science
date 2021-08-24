@@ -17,7 +17,9 @@ def main():
         for row in reader:
             database.append(row)
 
-    keys = list(database[0])
+    # Put STRs from the database column names as
+    strs = list(database[0])[1:]
+    print(f"{strs}")
 
     # Open the DNA sequence and read into memory as list
     with open(sys.argv[2], "r") as file:
