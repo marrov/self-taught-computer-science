@@ -17,9 +17,11 @@ def main():
         for row in reader:
             database.append(row)
 
-    keys = list(database[10)
+    keys = list(database[0])
 
-    # Open the DNA sequence and read into memory
+    # Open the DNA sequence and read into memory as list
+    with open(sys.argv[2], "r") as file:
+        sequence = [line.rstrip() for line in file]
 
     # TODO: For each of the STRs (from CSV file), compute the longest run of
     #       consecutive repeats of the STR in the DNA sequence to identify
