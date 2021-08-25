@@ -27,15 +27,30 @@ def main():
     # For each of the STRs, compute the longest run of
     # consecutive repeats of the STR in the DNA sequence
     for STR in STRs:
+        max_reps = max_STR_repeats(sequence, STR)
 
     # TODO: If the STR counts match with any individuals in the CSV file, your
     #       program should print out the name of the matching individual
 
 
-def (sequence: str, STR: str) -> int:
+def max_STR_repeats(sequence: str, STR: str) -> int:
     """Given both a DNA sequence and an STR as inputs,
     returns the maximum number of times that the STR repeats"""
-    return repeats
+
+    # Initialize list of number of repeats by position
+    repeats = [0] * len(sequence)
+
+    # For each position of the sequence, compute the repeats
+    for idx in range(len(sequence)):
+        # Exit loop if no repeats are possible
+        if idx + len(STR) == len(sequence):
+            break
+
+        # Check if STR in sequence and update repeats counter
+        while STR == sequence[idx + repeats[idx] * len(STR): len(STR) + idx + repeats[idx] * len(STR)]:
+            repeats[idx] += 1
+
+    return max(repeats)
 
 
 if __name__ == "__main__":
