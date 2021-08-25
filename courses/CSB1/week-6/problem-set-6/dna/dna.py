@@ -18,22 +18,24 @@ def main():
             database.append(row)
 
     # Put STRs from the database column names as
-    strs = list(database[0])[1:]
-    print(f"{strs}")
+    STRs = list(database[0])[1:]
 
     # Open the DNA sequence and read into memory as list
     with open(sys.argv[2], "r") as file:
         sequence = [line.rstrip() for line in file]
 
-    # TODO: For each of the STRs (from CSV file), compute the longest run of
-    #       consecutive repeats of the STR in the DNA sequence to identify
+    # For each of the STRs, compute the longest run of
+    # consecutive repeats of the STR in the DNA sequence
+    for STR in STRs:
 
     # TODO: If the STR counts match with any individuals in the CSV file, your
     #       program should print out the name of the matching individual
 
 
-def helper():
-    return
+def (sequence: str, STR: str) -> int:
+    """Given both a DNA sequence and an STR as inputs,
+    returns the maximum number of times that the STR repeats"""
+    return repeats
 
 
 if __name__ == "__main__":
