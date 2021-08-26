@@ -33,9 +33,9 @@ def main():
     # If the STR counts match with any individuals in the CSV file,
     # print out the name of the matching individual
     reps_dict = dict(zip(STRs, max_reps))
-    bool_list = []
-    for idx in range(len(database)):
 
+    for idx in range(len(database)):
+        bool_list = []
         for STR in STRs:
             if int(database[idx][STR]) == reps_dict[STR]:
                 bool_list.append(True)
