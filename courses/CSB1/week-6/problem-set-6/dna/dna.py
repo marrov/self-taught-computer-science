@@ -30,8 +30,10 @@ def main():
     for STR in STRs:
         max_reps.append(max_STR_repeats(sequence, STR))
 
-    # TODO: If the STR counts match with any individuals in the CSV file, your
-    #       program should print out the name of the matching individual
+    # If the STR counts match with any individuals in the CSV file,
+    # print out the name of the matching individual
+    reps_dict = dict(zip(STRs, max_reps))
+
 
 
 def max_STR_repeats(sequence: str, STR: str) -> int:
