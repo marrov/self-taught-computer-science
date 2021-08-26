@@ -42,6 +42,13 @@ def main():
             else:
                 bool_list.append(False)
 
+        if all(bool_list) == True:
+            print(f"{database[idx]['name']}")
+            return
+
+    print("No match")
+    return
+
 
 def max_STR_repeats(sequence: str, STR: str) -> int:
     """Given both a DNA sequence and an STR as inputs,
