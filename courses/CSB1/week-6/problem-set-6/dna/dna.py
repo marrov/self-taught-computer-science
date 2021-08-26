@@ -26,8 +26,9 @@ def main():
 
     # For each of the STRs, compute the longest run of
     # consecutive repeats of the STR in the DNA sequence
+    max_reps = []
     for STR in STRs:
-        max_reps = max_STR_repeats(sequence, STR)
+        max_reps.append(max_STR_repeats(sequence, STR))
 
     # TODO: If the STR counts match with any individuals in the CSV file, your
     #       program should print out the name of the matching individual
