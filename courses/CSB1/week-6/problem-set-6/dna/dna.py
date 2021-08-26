@@ -22,7 +22,7 @@ def main():
 
     # Open the DNA sequence and read into memory as list
     with open(sys.argv[2], "r") as file:
-        sequence = [line.rstrip() for line in file]
+        sequence = file.readline()
 
     # For each of the STRs, compute the longest run of
     # consecutive repeats of the STR in the DNA sequence
