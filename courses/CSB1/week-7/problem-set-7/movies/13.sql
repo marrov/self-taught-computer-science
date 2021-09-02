@@ -1,0 +1,1 @@
+SELECT name FROM (people INNER JOIN stars ON id = person_id) WHERE movie_id IN (SELECT movie_id FROM (people INNER JOIN stars ON id = person_id) WHERE name = "Kevin Bacon" AND birth = 1958) AND NOT name = "Kevin Bacon";
