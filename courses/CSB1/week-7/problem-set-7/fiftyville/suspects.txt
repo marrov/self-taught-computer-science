@@ -1,5 +1,3 @@
--- Obtained from license plate information
+-- Obtained latest nested query in log.sql
 Danielle
-Elizabeth
 Ernest
-Russell
