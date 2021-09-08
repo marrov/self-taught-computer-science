@@ -10,3 +10,5 @@ SELECT name FROM people WHERE license_plate IN (SELECT license_plate FROM courth
 SELECT name FROM people WHERE id IN (SELECT person_id FROM bank_accounts WHERE account_number IN (SELECT account_number FROM atm_transactions WHERE month = 7 AND day = 28 AND atm_location = "Fifer Street" AND transaction_type = "withdraw"));
 -- Narrow down the initial list using the second list of suspects
 SELECT name FROM people WHERE license_plate IN (SELECT license_plate FROM courthouse_security_logs WHERE month = 7 AND day = 28 AND hour = 10 AND minute >= 15 AND minute <= 25) INTERSECT SELECT name FROM people WHERE id IN (SELECT person_id FROM bank_accounts WHERE account_number IN (SELECT account_number FROM atm_transactions WHERE month = 7 AND day = 28 AND atm_location = "Fifer Street" AND transaction_type = "withdraw"));
+-- Find earliest flight out of Fiftyville the next day, based on Raymonds interview
+SELECT id FROM (SELECT id, min(hour) FROM flights WHERE origin_airport_id = (SELECT id FROM airports WHERE city = "Fiftyville") AND month = 7 AND day = 29);
