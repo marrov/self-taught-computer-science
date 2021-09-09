@@ -1,3 +1,2 @@
 -- Obtained latest nested query in log.sql
-Danielle
 Ernest
