@@ -1,2 +1,0 @@
--- Obtained latest nested query in log.sql
-Ernest
