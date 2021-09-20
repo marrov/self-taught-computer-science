@@ -8,6 +8,20 @@
 
         <script>
 
+            function check_part1(clicked_id)
+            {
+                if (clicked_id == "b2")
+                {
+                    document.getElementById(clicked_id).style.backgroundColor = "green"
+                    document.getElementById("p1").textContent="Correct!"
+                }
+                else
+                {
+                    document.getElementById(clicked_id).style.backgroundColor = "red"
+                    document.getElementById("p1").textContent="Incorrect"
+                }
+            }
+
         </script>
 
     </head>
