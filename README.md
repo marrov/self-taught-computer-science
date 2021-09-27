@@ -8,7 +8,7 @@ The following is a curated list of free courses from reputable universities like
 
 ID | Course | School | Duration | Requirements | Status
 :-- | :--: | :--: | :--: | :--: | :--:
-CSB1 | [Intro to Computer Science](https://www.edx.org/course/cs50s-introduction-computer-science-harvardx-cs50x) | Harvard | 10 weeks | None | Ongoing
+CSB1 | [Intro to Computer Science](https://www.edx.org/course/cs50s-introduction-computer-science-harvardx-cs50x) | Harvard | 10 weeks | None | week 8
 
 ## Programming
 
