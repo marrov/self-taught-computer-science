@@ -1,0 +1,16 @@
+body {
+    background-color: #fff;
+    color: #212529;
+    text-align: center;
+    font-family: proxima-nova, sans-serif;
+    letter-spacing: 3px;
+    font-size: 1em;
+}
+
+h1 {
+    text-transform: uppercase;
+}
+
+nav {
+    text-transform: uppercase;
+}
