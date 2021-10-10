@@ -1,16 +1,58 @@
 body {
     background-color: #fff;
-    color: #212529;
+    color: #303030;
     text-align: center;
     font-family: proxima-nova, sans-serif;
     letter-spacing: 3px;
     font-size: 1em;
+    margin: 2.5% 15%;
 }
 
 h1 {
     text-transform: uppercase;
 }
 
+h2 {
+    padding: 1% 0%;
+    text-align: left;
+}
+
 nav {
     text-transform: uppercase;
+}
+
+p {
+    padding: 1% 0%;
+    text-align: left;
+}
+
+ul {
+    padding: 1% 0%;
+    text-align: left;
+}
+
+ol {
+    padding: 1% 0%;
+    text-align: left;
+}
+
+dl {
+    padding: 1% 0%;
+    text-align: left;
+}
+
+a:link {
+    color:#a8a8a8;
+}
+
+a:visited {
+    color:#a8a8a8;
+}
+
+a:hover {
+    color:#cccccc;
+}
+
+a:active {
+    color:#cccccc;
 }
