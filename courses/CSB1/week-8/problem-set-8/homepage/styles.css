@@ -4,8 +4,6 @@ body {
     text-align: center;
     font-family: proxima-nova, sans-serif;
     letter-spacing: 3px;
-    font-size: 1em;
-    margin: 2.5% 15%;
 }
 
 h1 {
@@ -13,7 +11,6 @@ h1 {
 }
 
 h2 {
-    padding: 1% 0%;
     text-align: left;
 }
 
@@ -22,23 +19,23 @@ nav {
 }
 
 p {
-    padding: 1% 0%;
     text-align: left;
+    letter-spacing: 1.5px;
 }
 
 ul {
-    padding: 1% 0%;
     text-align: left;
+    letter-spacing: 1.5px;
 }
 
 ol {
-    padding: 1% 0%;
     text-align: left;
+    letter-spacing: 1.5px;
 }
 
 dl {
-    padding: 1% 0%;
     text-align: left;
+    letter-spacing: 1.5px;
 }
 
 a:link {

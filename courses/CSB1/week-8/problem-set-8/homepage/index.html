@@ -10,14 +10,40 @@
         <title>Homepage</title>
     </head>
     <body>
+        <div class="container-fluid p-4">
+
         <h1>Marc Rovira</h1>
-        <nav>
-            <a href="/index.html">Home</a> |
-            <a href="/about.html">About</a> |
-            <a href="/research.html">Research</a> |
-            <a href="/misc.html">Interests</a> |
-            <a href="/contact.html">Contact</a>
-        </nav><br>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="/index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="/about.html">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="/research.html">Research</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="/misc.html">Interests</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="/contact.html">Contact</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane container active" id="home"></div>
+            <div class="tab-pane container fade" id="about"></div>
+            <div class="tab-pane container fade" id="research"></div>
+            <div class="tab-pane container fade" id="interests"></div>
+            <div class="tab-pane container fade" id="contact"></div>
+        </div> <br>
+
         <p>Hello, world! This is my homepage</p>
+
+        </div>
     </body>
 </html>
