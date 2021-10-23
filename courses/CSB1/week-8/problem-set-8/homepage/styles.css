@@ -28,6 +28,10 @@ p {
     letter-spacing: 1.5px;
 }
 
+#welcome {
+    text-align: center;
+}
+
 ul {
     text-align: left;
     letter-spacing: 1.5px;

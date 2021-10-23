@@ -29,6 +29,13 @@
             <span class="slider round" onclick="toggle_mode()"></span>
         </label>
 
+        <script>
+            function toggle_mode() {
+            var element = document.body;
+            element.classList.toggle("dark-mode");
+            }
+        </script>
+
         <h1>Marc Rovira</h1>
 
         <!-- Nav tabs -->
@@ -57,7 +64,7 @@
             <div class="tab-pane container fade" id="research"></div>
             <div class="tab-pane container fade" id="interests"></div>
             <div class="tab-pane container fade" id="contact"></div>
-        </div> <br>
+        </div> <br> <br>
 
         <p id="welcome">
             Hello, World! This is my homepage. <br>
