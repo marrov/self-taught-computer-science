@@ -12,10 +12,15 @@
     <body>
         <div class="container-fluid p-2 p-sm-3 p-md-5">
 
+        <label class="switch float-right">
+            <input type="checkbox">
+            <span class="slider round" onclick="toggle_mode()"></span>
+        </label>
+
         <h1>My interests</h1>
 
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs justify-content-center">
+        <ul class="nav nav-tabs nav-fill">
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="/index.html">Home</a>
             </li>
