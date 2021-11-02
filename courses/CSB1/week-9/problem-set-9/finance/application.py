@@ -5,7 +5,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash, safe_str_cmp
 
 from helpers import apology, login_required, lookup, usd
 
@@ -121,9 +121,6 @@ def quote():
 def register():
     """Register user"""
 
-    # Forget any user_id
-    session.clear()
-
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
@@ -136,7 +133,7 @@ def register():
             return apology("must provide password", 403)
 
         # Ensure password and re-typed password match
-        elif not request.form.get("password") == request.form.get("repassword"):
+        elif not safe_str_cmp(request.form.get("password"), request.form.get("confirmation")):
             return apology("password confirmation does not match", 403)
 
         # Query database for username
