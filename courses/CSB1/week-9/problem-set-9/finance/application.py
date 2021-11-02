@@ -135,15 +135,19 @@ def register():
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
+        # Ensure password and re-typed password match
+        elif not request.form.get("password") == request.form.get("repassword"):
+            return apology("password confirmation does not match", 403)
+
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
-        # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+        # Ensure username does not exist
+        if len(rows) != 0:
+            return apology(f"username {request.form.get('username')} already exists", 403)
 
-        # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        # Add user to database
+        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get("username"), generate_password_hash(request.form.get("password")))
 
         # Redirect user to login page
         return redirect("/login")
