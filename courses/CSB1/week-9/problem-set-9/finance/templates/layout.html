@@ -52,7 +52,7 @@
 
         {% if get_flashed_messages() %}
             <header>
-                <div class="alert alert-primary border text-center" role="alert">
+                <div class="alert alert-primary alert-dismissible show text-center" role="alert">
                     {{ get_flashed_messages() | join(" ") }}
                 </div>
             </header>

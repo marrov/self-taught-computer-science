@@ -143,11 +143,12 @@ def register():
         if len(rows) != 0:
             return apology(f"username {request.form.get('username')} already exists", 403)
 
-        # Add user to database
+        # Register the user (i.e. add user and hash to the database)
         db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get("username"), generate_password_hash(request.form.get("password")))
 
-        # Redirect user to login page
-        return redirect("/login")
+        # Redirect user to login page with info message
+        flash("You were successfully registered")
+        return render_template("login.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
