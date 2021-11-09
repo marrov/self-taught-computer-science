@@ -6,6 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash, safe_str_cmp
+from datetime import datetime
 
 from helpers import apology, login_required, lookup, usd
 
@@ -65,9 +66,15 @@ def buy():
 
         if not symbol:
             return apology("stock not found", 403)
-        #elif
+        elif cash < price * int(shares):
+            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${price} for a total of ${int(shares) * price} but you only have ${cash}.')
         else:
-            return apology(f'TODO: buy {shares} shares of {symbol} at ${price}. You have ${cash}.')
+            # Register the transaction (i.e. add user and hash to the database)
+            db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "buy", symbol, shares, price)
+
+            # Redirect user to index page with info message
+            flash("Transaction completed sucessfully")
+            return render_template("apology.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
