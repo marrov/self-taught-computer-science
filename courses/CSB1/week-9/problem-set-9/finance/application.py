@@ -56,11 +56,16 @@ def buy():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-        quote_dict = lookup(request.form.get("symbol"))
-        if not quote_dict:
+
+        # Define variables for transaction
+        shares = request.form.get("shares")
+        price = lookup(request.form.get("symbol"))["price"]
+        symbol = lookup(request.form.get("symbol"))["symbol"]
+
+        if not symbol:
             return apology("stock not found", 403)
         else:
-            return apology("TODO: redirect to index")
+            return apology(f'TODO: buy {shares} shares of {symbol} at ${price}')
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
