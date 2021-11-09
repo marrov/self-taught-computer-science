@@ -53,7 +53,18 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        quote_dict = lookup(request.form.get("symbol"))
+        if not quote_dict:
+            return apology("stock not found", 403)
+        else:
+            return apology("TODO: redirect to index")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("buy.html")
 
 
 @app.route("/history")
@@ -122,6 +133,7 @@ def quote():
             return apology("stock not found", 403)
         else:
             return render_template("quoted.html", quote_dict=quote_dict)
+
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("quote.html")
