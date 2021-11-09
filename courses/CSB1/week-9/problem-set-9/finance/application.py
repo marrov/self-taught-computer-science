@@ -61,11 +61,13 @@ def buy():
         shares = request.form.get("shares")
         price = lookup(request.form.get("symbol"))["price"]
         symbol = lookup(request.form.get("symbol"))["symbol"]
+        cash =  db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
 
         if not symbol:
             return apology("stock not found", 403)
+        #elif
         else:
-            return apology(f'TODO: buy {shares} shares of {symbol} at ${price}')
+            return apology(f'TODO: buy {shares} shares of {symbol} at ${price}. You have ${cash}.')
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
