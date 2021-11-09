@@ -72,6 +72,9 @@ def buy():
             # Register the transaction (i.e. add user and hash to the database)
             db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "buy", symbol, shares, price)
 
+            # Update users' cash
+            db.execute("UPDATE users SET cash=? WHERE id=?", cash - int(shares) * price, session["user_id"])
+
             # Redirect user to index page with info message
             flash("Transaction completed sucessfully")
             return render_template("apology.html")
