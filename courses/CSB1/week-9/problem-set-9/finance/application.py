@@ -47,7 +47,7 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO", 200)
+    return render_template("index.html")
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -77,7 +77,7 @@ def buy():
 
             # Redirect user to index page with info message
             flash("Transaction completed sucessfully")
-            return render_template("apology.html")
+            return render_template("index.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:

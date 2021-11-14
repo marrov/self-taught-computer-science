@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+<div class="table-responsive">
+<table class="table table-hover">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Symbol</th>
+      <th scope="col">Name</th>
+      <th scope="col">Shares</th>
+      <th scope="col">Price</th>
+      <th scope="col">TOTAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">AAPL</th>
+      <td>Apple, Inc.</td>
+      <td>2</td>
+      <td>{{200 | usd}}</td>
+      <td>{{400 | usd}}</td>
+    </tr>
+    <tr>
+      <th scope="row">CASH</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{{9600 | usd}}</td>
+    </tr>
+    <tr>
+      <th scope="row"></th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="font-weight-bold">{{10000 | usd}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+{% endblock %}
