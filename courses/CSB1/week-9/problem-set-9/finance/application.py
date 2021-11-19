@@ -48,13 +48,20 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
 
-    # Define variables that describe the portfolio for the user
+    # Define variables that describe the users portfolio using SQL queries
     cash =  db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
-    stocks =  db.execute("SELECT stock, SUM(shares) FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
-    # sold
-    print(stocks)
+    stocks =  db.execute("SELECT stock AS symbol, SUM(CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
+    net_worth = cash
 
-    return render_template("index.html", cash=cash)
+    # Add updated info on each of the user's holdings
+    for idx, stock in enumerate(stocks):
+        quote_dict = lookup(stock["symbol"])
+        stock["name"] = quote_dict["name"]
+        stock["price"] =  quote_dict["price"]
+        stock["total"] = stock["price"] * stock["shares"]
+        net_worth += stock["total"]
+
+    return render_template("index.html", cash=cash, stocks=stocks, net_worth=net_worth)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -74,7 +81,7 @@ def buy():
         if not symbol:
             return apology("stock not found", 403)
         elif cash < price * int(shares):
-            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${price} for a total of ${int(shares) * price} but you only have ${cash}.')
+            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(int(shares) * price)} but you only have ${round(cash)}.')
         else:
             # Register the transaction (i.e. add user and hash to the database)
             db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "buy", symbol, shares, price)
@@ -84,7 +91,7 @@ def buy():
 
             # Redirect user to index page with info message
             flash("Transaction completed sucessfully")
-            return render_template("index.html")
+            return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:

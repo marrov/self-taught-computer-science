@@ -17,26 +17,28 @@
     </tr>
   </thead>
   <tbody>
+    {% for stock in stocks %}
     <tr>
-      <th scope="row">AAPL</th>
-      <td>Apple, Inc.</td>
-      <td>2</td>
-      <td>{{200 | usd}}</td>
-      <td>{{400 | usd}}</td>
+      <th scope="row">{{stock.symbol}}</th>
+      <td>{{stock.name}}</td>
+      <td>{{stock.shares}}</td>
+      <td>{{stock.price | usd}}</td>
+      <td>{{stock.total | usd}}</td>
     </tr>
+    {% endfor %}
     <tr>
       <th scope="row">CASH</th>
       <td></td>
       <td></td>
       <td></td>
-      <td>{{cash}}</td>
+      <td>{{cash | usd}}</td>
     </tr>
     <tr>
       <th scope="row"></th>
       <td></td>
       <td></td>
       <td></td>
-      <td class="font-weight-bold">{{10000 | usd}}</td>
+      <td class="font-weight-bold">{{net_worth | usd}}</td>
     </tr>
   </tbody>
 </table>
