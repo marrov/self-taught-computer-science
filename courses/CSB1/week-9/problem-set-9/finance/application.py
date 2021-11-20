@@ -54,7 +54,7 @@ def index():
     net_worth = cash
 
     # Add updated info on each of the user's holdings
-    for idx, stock in enumerate(stocks):
+    for stock in stocks:
         quote_dict = lookup(stock["symbol"])
         stock["name"] = quote_dict["name"]
         stock["price"] =  quote_dict["price"]
