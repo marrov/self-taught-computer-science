@@ -9,7 +9,9 @@
         <div class="mb-3">
             <select class="form-select mx-auto w-auto" name="symbol">
                 <option disabled="" selected="">Symbol</option>
-                <option value="AAPL">AAPL</option>
+                {% for stock in stocks %}
+                <option value={{stock.symbol}}>{{stock.symbol}}</option>
+                {% endfor %}
             </select>
         </div>
 
@@ -21,4 +23,14 @@
         </div>
     </form>
 {% endblock %}
+
+    {% for stock in stocks %}
+    <tr>
+      <th scope="row">{{stock.symbol}}</th>
+      <td>{{stock.name}}</td>
+      <td>{{stock.shares}}</td>
+      <td>{{stock.price | usd}}</td>
+      <td>{{stock.total | usd}}</td>
+    </tr>
+    {% endfor %}
 
