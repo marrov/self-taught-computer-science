@@ -212,7 +212,34 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Define variables for transaction
+        shares = request.form.get("shares")
+        price = lookup(request.form.get("symbol"))["price"]
+        symbol = lookup(request.form.get("symbol"))["symbol"]
+        cash =  db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+
+        if not symbol:
+            return apology("stock not found", 403)
+        elif cash < price * int(shares):
+            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(int(shares) * price)} but you only have ${round(cash)}.')
+        else:
+            # Register the transaction (i.e. add user and hash to the database)
+            db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "buy", symbol, shares, price)
+
+            # Update users' cash
+            db.execute("UPDATE users SET cash=? WHERE id=?", cash - int(shares) * price, session["user_id"])
+
+            # Redirect user to index page with info message
+            flash("Transaction completed sucessfully")
+            return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("sell.html")
 
 
 def errorhandler(e):
