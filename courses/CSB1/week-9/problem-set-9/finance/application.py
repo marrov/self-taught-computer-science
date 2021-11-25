@@ -79,14 +79,14 @@ def buy():
         cash =  db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
 
         if not symbol:
-            return apology("stock not found", 403)
+            return apology("stock not found", 400)
         elif cash < price * int(shares):
-            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(int(shares) * price)} but you only have ${round(cash)}.')
+            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(int(shares) * price)} but you only have ${round(cash)}.', 400)
         else:
-            # Register the transaction (i.e. add user and hash to the database)
+            # Register the transaction into the database
             db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "buy", symbol, shares, price)
 
-            # Update users' cash
+            # Update user's cash
             db.execute("UPDATE users SET cash=? WHERE id=?", cash - int(shares) * price, session["user_id"])
 
             # Redirect user to index page with info message
@@ -161,7 +161,7 @@ def quote():
     if request.method == "POST":
         quote_dict = lookup(request.form.get("symbol"))
         if not quote_dict:
-            return apology("stock not found", 403)
+            return apology("stock not found", 400)
         else:
             return render_template("quoted.html", quote_dict=quote_dict)
 
@@ -213,27 +213,39 @@ def register():
 def sell():
     """Sell shares of stock"""
 
-    stocks =  db.execute("SELECT stock AS symbol FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
+    # Retrieve current symbols and shares of stocks owned by the user
+    stocks =  db.execute("SELECT stock AS symbol, shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
         # Define variables for transaction
-        shares = request.form.get("shares")
-        price = lookup(request.form.get("symbol"))["price"]
-        symbol = lookup(request.form.get("symbol"))["symbol"]
+        shares = int(request.form.get("shares"))
+        symbol = request.form.get("symbol")
+        price = lookup(symbol)["price"]
         cash =  db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
 
-        if not symbol:
-            return apology("stock not found", 403)
-        elif cash < price * int(shares):
-            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(int(shares) * price)} but you only have ${round(cash)}.')
+        if not symbol or symbol not in [stocks[i]['symbol'] for i in range(len(stocks))]:
+            return apology("stock not found", 400)
+        elif shares < 0:
+            return apology("number of shares must be positive", 400)
         else:
-            # Register the transaction (i.e. add user and hash to the database)
-            db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "buy", symbol, shares, price)
 
-            # Update users' cash
-            db.execute("UPDATE users SET cash=? WHERE id=?", cash - int(shares) * price, session["user_id"])
+            # Get maximum ammount of sellale shares of the requested stock
+            for i in range(len(stocks)):
+                if stocks[i]['symbol'] == symbol:
+                    max_shares = stocks[i]['shares']
+                    break
+
+            # Check that user owns enough shares of the requested stock
+            if shares > max_shares:
+                return apology("you do not own enough shares", 400)
+
+            # Register the transaction into the database
+            db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "sell", symbol, shares, price)
+
+            # Update user's cash
+            db.execute("UPDATE users SET cash=? WHERE id=?", cash + shares * price, session["user_id"])
 
             # Redirect user to index page with info message
             flash("Transaction completed sucessfully")
