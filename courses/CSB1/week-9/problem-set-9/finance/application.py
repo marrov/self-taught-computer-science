@@ -214,7 +214,7 @@ def sell():
     """Sell shares of stock"""
 
     # Retrieve current symbols and shares of stocks owned by the user
-    stocks =  db.execute("SELECT stock AS symbol, shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
+    stocks =  db.execute("SELECT stock AS symbol, SUM(CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -230,16 +230,12 @@ def sell():
         elif shares < 0:
             return apology("number of shares must be positive", 400)
         else:
-
-            # Get maximum ammount of sellale shares of the requested stock
+            # Check that user owns enough shares of the requested stock
             for i in range(len(stocks)):
                 if stocks[i]['symbol'] == symbol:
                     max_shares = stocks[i]['shares']
-                    break
-
-            # Check that user owns enough shares of the requested stock
-            if shares > max_shares:
-                return apology("you do not own enough shares", 400)
+                    if shares > max_shares:
+                        return apology("you do not own enough shares", 400)
 
             # Register the transaction into the database
             db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "sell", symbol, shares, price)
