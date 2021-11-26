@@ -53,6 +53,15 @@ def index():
     stocks =  db.execute("SELECT stock AS symbol, SUM(CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
     net_worth = cash
 
+    # Remove stocks with zero shares
+    indexes = []
+    for i in range(len(stocks)):
+        if stocks[i]['shares'] == 0:
+            indexes.append(i)
+
+    for index in sorted(indexes, reverse=True):
+        del stocks[index]
+
     # Add updated info on each of the user's holdings
     for stock in stocks:
         quote_dict = lookup(stock["symbol"])
@@ -215,6 +224,15 @@ def sell():
 
     # Retrieve current symbols and shares of stocks owned by the user
     stocks =  db.execute("SELECT stock AS symbol, SUM(CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
+
+    # Remove stocks with zero shares
+    indexes = []
+    for i in range(len(stocks)):
+        if stocks[i]['shares'] == 0:
+            indexes.append(i)
+
+    for index in sorted(indexes, reverse=True):
+        del stocks[index]
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
