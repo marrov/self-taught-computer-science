@@ -82,21 +82,24 @@ def buy():
     if request.method == "POST":
 
         # Define variables for transaction
-        shares = request.form.get("shares")
-        price = lookup(request.form.get("symbol"))["price"]
-        symbol = lookup(request.form.get("symbol"))["symbol"]
+        shares = int(request.form.get("shares"))
+        symbol = request.form.get("symbol")
         cash =  db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
 
-        if not symbol:
+        if not lookup(symbol):
             return apology("stock not found", 400)
-        elif cash < price * int(shares):
-            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(int(shares) * price)} but you only have ${round(cash)}.', 400)
+            
+        # Loopup price as stock does exist
+        price = lookup(request.form.get("symbol"))["price"]
+            
+        if cash < price * shares:
+            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(shares * price)} but you only have ${round(cash)}.', 400)
         else:
             # Register the transaction into the database
             db.execute("INSERT INTO transactions (user_id, date_time, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "buy", symbol, shares, price)
 
             # Update user's cash
-            db.execute("UPDATE users SET cash=? WHERE id=?", cash - int(shares) * price, session["user_id"])
+            db.execute("UPDATE users SET cash=? WHERE id=?", cash - shares * price, session["user_id"])
 
             # Redirect user to index page with info message
             flash("Transaction completed sucessfully")
