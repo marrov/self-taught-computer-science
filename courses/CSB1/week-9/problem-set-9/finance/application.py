@@ -93,7 +93,7 @@ def buy():
             return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(int(shares) * price)} but you only have ${round(cash)}.', 400)
         else:
             # Register the transaction into the database
-            db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "buy", symbol, shares, price)
+            db.execute("INSERT INTO transactions (user_id, date, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "buy", symbol, shares, price)
 
             # Update user's cash
             db.execute("UPDATE users SET cash=? WHERE id=?", cash - int(shares) * price, session["user_id"])
@@ -256,7 +256,7 @@ def sell():
                         return apology("you do not own enough shares", 400)
 
             # Register the transaction into the database
-            db.execute("INSERT INTO transactions (user_id, year, month, day, hour, minute, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().year, datetime.now().month, datetime.now().day, datetime.now().hour, datetime.now().minute, "sell", symbol, shares, price)
+            db.execute("INSERT INTO transactions (user_id, date, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().strftime("%Y-%m-$d %H:%M:%S"), "sell", symbol, shares, price)
 
             # Update user's cash
             db.execute("UPDATE users SET cash=? WHERE id=?", cash + shares * price, session["user_id"])
