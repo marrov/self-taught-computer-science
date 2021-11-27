@@ -49,8 +49,9 @@ def index():
     """Show portfolio of stocks"""
 
     # Define variables that describe the users portfolio using SQL queries
-    cash =  db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
-    stocks =  db.execute("SELECT stock AS symbol, SUM(CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
+    cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+    stocks = db.execute(
+        "SELECT stock AS symbol, SUM(CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
     net_worth = cash
 
     # Remove stocks with zero shares
@@ -66,7 +67,7 @@ def index():
     for stock in stocks:
         quote_dict = lookup(stock["symbol"])
         stock["name"] = quote_dict["name"]
-        stock["price"] =  quote_dict["price"]
+        stock["price"] = quote_dict["price"]
         stock["total"] = stock["price"] * stock["shares"]
         net_worth += stock["total"]
 
@@ -84,19 +85,20 @@ def buy():
         # Define variables for transaction
         shares = int(request.form.get("shares"))
         symbol = request.form.get("symbol")
-        cash =  db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+        cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
 
         if not lookup(symbol):
             return apology("stock not found", 400)
-            
+
         # Loopup price as stock does exist
         price = lookup(request.form.get("symbol"))["price"]
-            
+
         if cash < price * shares:
             return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(shares * price)} but you only have ${round(cash)}.', 400)
         else:
             # Register the transaction into the database
-            db.execute("INSERT INTO transactions (user_id, date_time, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "buy", symbol, shares, price)
+            db.execute("INSERT INTO transactions (user_id, date_time, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?)",
+                       session["user_id"], datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "buy", symbol, shares, price)
 
             # Update user's cash
             db.execute("UPDATE users SET cash=? WHERE id=?", cash - shares * price, session["user_id"])
@@ -114,10 +116,11 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    
+
     # Retrieve transactions for all user stocks
-    stocks =  db.execute("SELECT stock AS symbol, (CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares, price, date_time FROM transactions WHERE user_id = ?", session["user_id"])
-    
+    stocks = db.execute(
+        "SELECT stock AS symbol, (CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares, price, date_time FROM transactions WHERE user_id = ?", session["user_id"])
+
     return render_template("history.html", stocks=stocks)
 
 
@@ -213,7 +216,8 @@ def register():
             return apology(f"username {request.form.get('username')} already exists", 400)
 
         # Register the user (i.e. add user and hash to the database)
-        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get("username"), generate_password_hash(request.form.get("password")))
+        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get(
+            "username"), generate_password_hash(request.form.get("password")))
 
         # Redirect user to login page with info message
         flash("You were successfully registered")
@@ -230,7 +234,8 @@ def sell():
     """Sell shares of stock"""
 
     # Retrieve current symbols and shares of stocks owned by the user
-    stocks =  db.execute("SELECT stock AS symbol, SUM(CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
+    stocks = db.execute(
+        "SELECT stock AS symbol, SUM(CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
 
     # Remove stocks with zero shares
     indexes = []
@@ -248,7 +253,7 @@ def sell():
         shares = int(request.form.get("shares"))
         symbol = request.form.get("symbol")
         price = lookup(symbol)["price"]
-        cash =  db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+        cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
 
         if not symbol or symbol not in [stocks[i]['symbol'] for i in range(len(stocks))]:
             return apology("stock not found", 400)
@@ -263,7 +268,8 @@ def sell():
                         return apology("you do not own enough shares", 400)
 
             # Register the transaction into the database
-            db.execute("INSERT INTO transactions (user_id, date_time, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?)", session["user_id"], datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "sell", symbol, shares, price)
+            db.execute("INSERT INTO transactions (user_id, date_time, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?)",
+                       session["user_id"], datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "sell", symbol, shares, price)
 
             # Update user's cash
             db.execute("UPDATE users SET cash=? WHERE id=?", cash + shares * price, session["user_id"])
