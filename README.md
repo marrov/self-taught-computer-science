@@ -8,7 +8,7 @@ The following is a curated list of free courses from reputable universities like
 
 ID | Course | School | Duration | Requirements | Status
 :-- | :--: | :--: | :--: | :--: | :--:
-CSB1 | [Intro to Computer Science](https://www.edx.org/course/cs50s-introduction-computer-science-harvardx-cs50x) | Harvard | 10 weeks | None | Ongoing
+CSB1 | [CS50's Introduction to Computer Science](https://www.edx.org/course/cs50s-introduction-computer-science-harvardx-cs50x) | Harvard | 6-18 hours/week for 12 weeks | None | On final project
 
 ## Programming
 
@@ -36,8 +36,8 @@ PO3 | [Programming Languages, Part C](https://click.linksynergy.com/deeplink?id=
 ID | Course | School | Duration | Requirements | Status
 :-- | :--: | :--: | :--: | :--: | :--:
 T1 | [Computer Science: Algorithms, Theory, and Machines](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fcs-algorithms-theory-machines) | Princeton | 10 weeks | CSB1 | Not started
-T2 | [Algorithms, Part I](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Falgorithms-part1) | Princeton | 6 weeks | 6-12 hours/week | T1 | Not started
-T3 | [Algorithms, Part II](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Falgorithms-part2) | Princeton | 6 weeks | 6-12 hours/week | T2 | Not started
+T2 | [Algorithms, Part I](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Falgorithms-part1) | Princeton | 6 weeks | T1 | Not started
+T3 | [Algorithms, Part II](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Falgorithms-part2) | Princeton | 6 weeks | T2 | Not started
 
 ## Applications
 
