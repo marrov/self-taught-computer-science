@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+<div class="table-responsive">
+<table class="table table-hover">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Symbol</th>
+      <th scope="col">Name</th>
+      <th scope="col">Shares</th>
+      <th scope="col">Price</th>
+      <th scope="col">TOTAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for stock in stocks %}
+    <tr>
+      <th scope="row">{{stock.symbol}}</th>
+      <td>{{stock.name}}</td>
+      <td>{{stock.shares}}</td>
+      <td>{{stock.price | usd}}</td>
+      <td>{{stock.total | usd}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <th scope="row">CASH</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{{cash | usd}}</td>
+    </tr>
+    <tr>
+      <th scope="row"></th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="font-weight-bold">{{net_worth | usd}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+{% endblock %}
