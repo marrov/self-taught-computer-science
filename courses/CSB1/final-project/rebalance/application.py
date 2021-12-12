@@ -123,32 +123,32 @@ def register():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
+
         # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 400)
+        #if not request.form.get("username"):
+        #    return apology("must provide username", 400)
 
         # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("must provide password", 400)
+        #elif not request.form.get("password"):
+        #    return apology("must provide password", 400)
 
         # Ensure password and re-typed password match
-        elif not safe_str_cmp(request.form.get("password"), request.form.get("confirmation")):
-            return apology("password confirmation does not match", 400)
+        #elif not safe_str_cmp(request.form.get("password"), request.form.get("confirmation")):
+        #    return apology("password confirmation does not match", 400)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        #rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username does not exist
-        if len(rows) != 0:
-            return apology(f"username {request.form.get('username')} already exists", 400)
+        #if len(rows) != 0:
+        #    return apology(f"username {request.form.get('username')} already exists", 400)
 
         # Register the user (i.e. add user and hash to the database)
-        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get(
-            "username"), generate_password_hash(request.form.get("password")))
+        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get("username"), generate_password_hash(request.form.get("password")))
 
         # Redirect user to login page with info message
-        flash("You were successfully registered")
-        return render_template("login.html")
+        #flash("You were successfully registered")
+        return render_template("home.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
