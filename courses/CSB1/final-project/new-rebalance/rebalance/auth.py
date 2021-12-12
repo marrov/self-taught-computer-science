@@ -72,7 +72,7 @@ def register():
                 f'Password must be between {MIN_PASS_LEN} and {MAX_LEN} characters', category='error')
         else:
             # Add new user to the database
-            new_user = User(username=username, password=generate_password_hash(password)
+            new_user = User(username=username, password=generate_password_hash(password))
             db.session.add(new_user)
             db.session.commit()
 
