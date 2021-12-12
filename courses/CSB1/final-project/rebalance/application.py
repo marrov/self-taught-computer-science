@@ -69,56 +69,6 @@ def index():
     return render_template("index.html", cash=cash, stocks=stocks, net_worth=net_worth)
 
 
-@app.route("/buy", methods=["GET", "POST"])
-@login_required
-def buy():
-    """Buy shares of stock"""
-
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-
-        # Define variables for transaction
-        shares = int(request.form.get("shares"))
-        symbol = request.form.get("symbol")
-        cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
-
-        if not lookup(symbol):
-            return apology("stock not found", 400)
-
-        # Loopup price as stock does exist
-        price = lookup(request.form.get("symbol"))["price"]
-
-        if cash < price * shares:
-            return apology(f'Insufficient funds: you are trying to buy {shares} shares of {symbol} at ${round(price)} for a total of ${round(shares * price)} but you only have ${round(cash)}.', 400)
-        else:
-            # Register the transaction into the database
-            db.execute("INSERT INTO transactions (user_id, date_time, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?)",
-                       session["user_id"], datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "buy", symbol, shares, price)
-
-            # Update user's cash
-            db.execute("UPDATE users SET cash=? WHERE id=?", cash - shares * price, session["user_id"])
-
-            # Redirect user to index page with info message
-            flash("Transaction completed sucessfully")
-            return redirect("/")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("buy.html")
-
-
-@app.route("/history")
-@login_required
-def history():
-    """Show history of transactions"""
-
-    # Retrieve transactions for all user stocks
-    stocks = db.execute(
-        "SELECT stock AS symbol, (CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares, price, date_time FROM transactions WHERE user_id = ?", session["user_id"])
-
-    return render_template("history.html", stocks=stocks)
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -166,24 +116,6 @@ def logout():
     return redirect("/")
 
 
-@app.route("/quote", methods=["GET", "POST"])
-@login_required
-def quote():
-    """Get stock quote."""
-
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-        quote_dict = lookup(request.form.get("symbol"))
-        if not quote_dict:
-            return apology("stock not found", 400)
-        else:
-            return render_template("quoted.html", quote_dict=quote_dict)
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("quote.html")
-
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
@@ -221,61 +153,6 @@ def register():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
-
-
-@app.route("/sell", methods=["GET", "POST"])
-@login_required
-def sell():
-    """Sell shares of stock"""
-
-    # Retrieve current symbols and shares of stocks owned by the user
-    stocks = db.execute(
-        "SELECT stock AS symbol, SUM(CASE WHEN transaction_type='buy' THEN shares WHEN transaction_type='sell' THEN -shares ELSE NULL END) AS shares FROM transactions WHERE user_id = ? GROUP BY stock", session["user_id"])
-
-    # Remove stocks with zero shares
-    indexes = []
-    for i in range(len(stocks)):
-        if stocks[i]['shares'] == 0:
-            indexes.append(i)
-
-    for index in sorted(indexes, reverse=True):
-        del stocks[index]
-
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-
-        # Define variables for transaction
-        shares = int(request.form.get("shares"))
-        symbol = request.form.get("symbol")
-        price = lookup(symbol)["price"]
-        cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
-
-        if not symbol or symbol not in [stocks[i]['symbol'] for i in range(len(stocks))]:
-            return apology("stock not found", 400)
-        elif shares < 0:
-            return apology("number of shares must be positive", 400)
-        else:
-            # Check that user owns enough shares of the requested stock
-            for i in range(len(stocks)):
-                if stocks[i]['symbol'] == symbol:
-                    max_shares = stocks[i]['shares']
-                    if shares > max_shares:
-                        return apology("you do not own enough shares", 400)
-
-            # Register the transaction into the database
-            db.execute("INSERT INTO transactions (user_id, date_time, transaction_type, stock, shares, price) VALUES(?, ?, ?, ?, ?, ?)",
-                       session["user_id"], datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "sell", symbol, shares, price)
-
-            # Update user's cash
-            db.execute("UPDATE users SET cash=? WHERE id=?", cash + shares * price, session["user_id"])
-
-            # Redirect user to index page with info message
-            flash("Transaction completed sucessfully")
-            return redirect("/")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("sell.html", stocks=stocks)
 
 
 def errorhandler(e):
