@@ -41,6 +41,7 @@
   --bs-danger: #dc3545;
   --bs-light: #f8f9fa;
   --bs-dark: #212529;
+  --bs-custom-rgb: 198, 199, 200;
   --bs-primary-rgb: 13, 110, 253;
   --bs-secondary-rgb: 108, 117, 125;
   --bs-success-rgb: 25, 135, 84;
@@ -11315,6 +11316,7 @@ body {
 #layoutAuthentication #layoutAuthentication_content {
   min-width: 0;
   flex-grow: 1;
+  margin: 60px 0;
 }
 #layoutAuthentication #layoutAuthentication_footer {
   min-width: 0;
