@@ -12,6 +12,12 @@ def home():
     return render_template("home.html", user=current_user)
 
 
+@views.route('/index', methods=['GET'])
+def index():
+    """Loads index page"""
+    return render_template("index.html", user=current_user)
+
+
 @views.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
