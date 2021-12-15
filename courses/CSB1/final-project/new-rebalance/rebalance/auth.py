@@ -61,15 +61,13 @@ def register():
         user = User.query.filter_by(username=username).first()
 
         if user:
-            flash('Username already exists.', category='error')
+            flash('Username already exists', category='error')
         elif len(username) < MIN_USER_LEN or len(username) > MAX_LEN:
-            flash(
-                f'Username must be between {MIN_USER_LEN} and {MAX_LEN} characters', category='error')
+            flash(f'Username must be between {MIN_USER_LEN} and {MAX_LEN} characters', category='error')
+        elif len(password) < MIN_PASS_LEN or len(password) > MAX_LEN:
+            flash(f'Password must be between {MIN_PASS_LEN} and {MAX_LEN} characters', category='error')
         elif not safe_str_cmp(password, confirmation):
             flash('Passwords do not match', category='error')
-        elif len(username) < MIN_PASS_LEN or len(username) > MAX_LEN:
-            flash(
-                f'Password must be between {MIN_PASS_LEN} and {MAX_LEN} characters', category='error')
         else:
             # Add new user to the database
             new_user = User(username=username, password=generate_password_hash(password))

@@ -11,18 +11,18 @@
     <div class="card-body">
         <form action="/login" method="post">
             <div class="form-floating mb-3">
-                <input class="form-control" id="username" type="username" placeholder="Username" />
+                <input class="form-control" id="username" name="username" type="text" placeholder="Username">
                 <label for="username">Username</label>
             </div>
 
             <div class="form-floating mb-3">
-                <input class="form-control" id="password" type="password" placeholder="Password" />
+                <input class="form-control" id="password" name="password" type="password" placeholder="Password">
                 <label for="password">Password</label>
             </div>
 
             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                 <a class="small" href="#">Forgot Password?</a>
-                <a class="btn btn-primary" type="submit">Login</a>
+                <button class="btn btn-primary" type="submit">Login</button>
             </div>
         </form>
     </div>
