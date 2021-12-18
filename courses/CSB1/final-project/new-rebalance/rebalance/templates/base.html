@@ -23,9 +23,9 @@
     <body class="sb-nav-fixed" style="background-color: #e9ecef;">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="#">Rebalance</a>
+            <a class="navbar-brand ms-4 ps-5" href="#">Rebalance</a>
             <!-- Navbar-->
-            <ul class="navbar-nav ms-auto pe-2">
+            <ul class="navbar-nav ms-auto me-4 pe-5">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
@@ -64,24 +64,13 @@
         {% endwith %}
 
         <div id="layoutAuthentication">
-            <div id="layoutAuthentication_content">
-                <main>
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-5">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    {% block main %}{% endblock %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
+
+            {% block main %}{% endblock %}
 
             <div id="layoutAuthentication_footer">
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
+                        <div class="d-flex align-items-center justify-content-between small ms-4 ps-5 me-4 pe-5">
                             <div class="text-muted"> &copy; Copyright 2021, Rebalance</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
