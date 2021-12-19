@@ -29,21 +29,15 @@
     <body class="sb-nav-fixed" style="background-color: #e9ecef;">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ms-4 ps-5" href="#">Rebalance</a>
+            <a class="navbar-brand ms-4 ps-5" href="/">Rebalance</a>
             <!-- Navbar-->
-            <ul class="navbar-nav ms-auto me-4 pe-5">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
+            {% if user.is_authenticated %}
+            <a class="nav-item nav-link" id="dashboard" href="{{url_for('views.dashboard')}}">Dashboard</a>
+            <a class="nav-item nav-link" id="logout" href="{{url_for('auth.logout')}}">Logout</a>
+            {% else %}
+            <a class="nav-item nav-link" id="login" href="{{url_for('auth.login')}}">Login</a>
+            <a class="nav-item nav-link" id="signUp" href="{{url_for('auth.register')}}">Sign Up</a>
+            {% endif %}
         </nav>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
