@@ -31,13 +31,25 @@
             <!-- Navbar Brand-->
             <a class="navbar-brand ms-4 ps-5" href="/">Rebalance</a>
             <!-- Navbar-->
-            {% if user.is_authenticated %}
-            <a class="nav-item nav-link" id="dashboard" href="{{url_for('views.dashboard')}}">Dashboard</a>
-            <a class="nav-item nav-link" id="logout" href="{{url_for('auth.logout')}}">Logout</a>
-            {% else %}
-            <a class="nav-item nav-link" id="login" href="{{url_for('auth.login')}}">Login</a>
-            <a class="nav-item nav-link" id="signUp" href="{{url_for('auth.register')}}">Sign Up</a>
-            {% endif %}
+            <ul class="navbar-nav ms-auto me-4 pe-5">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        {% if user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{{url_for('views.home')}}">Home</a></li>
+                            <li><a class="dropdown-item" href="{{url_for('views.dashboard')}}">Dashboard</a></li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Logout</a></li>
+                        {% else %}
+                            <li><a class="dropdown-item" href="{{url_for('auth.login')}}">Login</a></li>
+                            <li><a class="dropdown-item" href="{{url_for('auth.register')}}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
         </nav>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
