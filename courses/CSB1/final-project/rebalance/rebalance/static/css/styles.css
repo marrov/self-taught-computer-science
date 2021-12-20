@@ -11794,3 +11794,9 @@ footer.footer {
   padding-top: 4rem;
   padding-bottom: 4rem;
 }
+
+#flaskalerts {
+  margin-top: 56px;
+  position: absolute;
+  width: 100%;
+}
