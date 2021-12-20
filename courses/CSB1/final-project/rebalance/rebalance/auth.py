@@ -60,6 +60,7 @@ def register():
         # Query the database for the user
         user = User.query.filter_by(username=username).first()
 
+        # Sanity checks on username and password
         if user:
             flash('Username already exists', category='error')
         elif len(username) < MIN_USER_LEN or len(username) > MAX_LEN:
@@ -69,7 +70,7 @@ def register():
         elif not safe_str_cmp(password, confirmation):
             flash('Passwords do not match', category='error')
         else:
-            # Add new user to the database
+            # Add new user to the database if all checks are passed
             new_user = User(username=username, password=generate_password_hash(password))
             db.session.add(new_user)
             db.session.commit()
