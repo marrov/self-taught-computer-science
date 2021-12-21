@@ -24,3 +24,23 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
 });
+
+window.addEventListener('DOMContentLoaded', event => {
+
+    // Add table row when click btn
+    const addAssetRow = document.getElementById('addAssetRow');
+    addAssetRow.addEventListener('click', event => {
+        const assetTable = document.getElementById('assetTable');
+        const assetRow = document.getElementById('assetRow');
+        const newRow = assetRow.cloneNode(true);
+        assetTable.appendChild(newRow);
+    });
+
+    // Delete table row when click btn
+    const deleteAssetRow = document.getElementById('deleteAssetRow');
+    deleteAssetRow.addEventListener('click', event => {
+        const assetTable = document.getElementById('assetTable');
+        assetTable.removeChild(assetTable.lastElementChild);
+    });
+
+});

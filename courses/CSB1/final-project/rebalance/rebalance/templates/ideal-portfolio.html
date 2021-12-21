@@ -13,30 +13,47 @@ Ideal portfolio
     </ol>
     
     <div class="row">
-        <label for="asset-0" class="form-label">Asset: Cash (%)</label>
-        <input type="range" class="form-range" min="0" max="100" step="1" id="asset-0">
-    </div>
-
-    <div class="row">
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-area me-1"></i>
-                    Area Chart Example
-                </div>
-                <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-hover" id="assetTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Name (ISIN)</th>
+                            <th scope="col">Target Allocation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="assetRow">
+                            <td>
+                                <select name="fund">
+                                {% for fund in funds %}
+                                <option value="{{fund.isin}}">({{fund.isin}}) {{fund.name}}</option>
+                                {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" min="0" max="100" placeholder="%">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i>
-                    Bar Chart Example
-                </div>
-                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-            </div>
+            <ul class="list-inline m-0">
+                <li class="list-inline-item">
+                    <button id="addAssetRow" class="btn btn-success" type="button" data-toggle="tooltip" data-placement="top"
+                        title="Add"><i class="fa fa-plus"></i></button>
+                </li>
+                <li class="list-inline-item">
+                    <button id="deleteAssetRow" class="btn btn-danger" type="button" data-toggle="tooltip" data-placement="top"
+                        title="Delete"><i class="fa fa-trash-alt"></i></button>
+                </li>
+                <li class="list-inline-item">
+                    <button class="btn btn-primary" type="submit">Save portfolio</button>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
+
 
 {% endblock %}

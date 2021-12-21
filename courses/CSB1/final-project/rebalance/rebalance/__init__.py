@@ -1,11 +1,13 @@
-from os import path
+from .funds import Funds
 
+from os import path
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 DB_NAME = "rebalance.db"
+FUNDS = Funds()
 
 
 def create_app():
