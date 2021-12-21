@@ -15,14 +15,15 @@ Ideal portfolio
     <div class="row">
         <div class="col">
             <div class="table-responsive">
-                <table class="table table-hover" id="assetTable">
+                <table class="table table-hover">
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">Name (ISIN)</th>
                             <th scope="col">Target Allocation</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="assetTable">
                         <tr id="assetRow">
                             <td>
                                 <select name="fund">
@@ -34,26 +35,25 @@ Ideal portfolio
                             <td>
                                 <input type="number" min="0" max="100" placeholder="%">
                             </td>
+                            <td>
+                                <ul class="list-inline m-0">
+                                    <li class="list-inline-item">
+                                        <button id="addAssetRow" class="btn btn-success btn-sm" type="button" data-toggle="tooltip" data-placement="top"
+                                            title="Add" onclick="addRow()"><i class="fa fa-plus"></i></button>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <button id="deleteAssetRow" class="btn btn-danger btn-sm" type="button" data-toggle="tooltip" data-placement="top"
+                                            title="Delete" onclick="deleteRow(this)"><i class="fa fa-trash-alt"></i></button>
+                                    </li>
+                                </ul>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <ul class="list-inline m-0">
-                <li class="list-inline-item">
-                    <button id="addAssetRow" class="btn btn-success" type="button" data-toggle="tooltip" data-placement="top"
-                        title="Add"><i class="fa fa-plus"></i></button>
-                </li>
-                <li class="list-inline-item">
-                    <button id="deleteAssetRow" class="btn btn-danger" type="button" data-toggle="tooltip" data-placement="top"
-                        title="Delete"><i class="fa fa-trash-alt"></i></button>
-                </li>
-                <li class="list-inline-item">
-                    <button class="btn btn-primary" type="submit">Save portfolio</button>
-                </li>
-            </ul>
+            <button class="btn btn-primary" type="submit">Save portfolio</button>
         </div>
     </div>
 </div>
-
 
 {% endblock %}

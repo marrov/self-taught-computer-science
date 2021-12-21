@@ -25,22 +25,21 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-window.addEventListener('DOMContentLoaded', event => {
+function deleteRow(btn) {
+    var row = btn.parentNode.parentNode;
+    var i = row.parentNode.parentNode.rowIndex - 1;
+    var rowCount = document.getElementById('assetTable').rows.length;;
+    if (rowCount == 1) {
+        alert('This is the only row left in the table, it cannot be deleted!')
+    } else {
+        document.getElementById('assetTable').deleteRow(i);
+    }
+}
 
-    // Add table row when click btn
-    const addAssetRow = document.getElementById('addAssetRow');
-    addAssetRow.addEventListener('click', event => {
-        const assetTable = document.getElementById('assetTable');
-        const assetRow = document.getElementById('assetRow');
-        const newRow = assetRow.cloneNode(true);
-        assetTable.appendChild(newRow);
-    });
-
-    // Delete table row when click btn
-    const deleteAssetRow = document.getElementById('deleteAssetRow');
-    deleteAssetRow.addEventListener('click', event => {
-        const assetTable = document.getElementById('assetTable');
-        assetTable.removeChild(assetTable.lastElementChild);
-    });
-
-});
+function addRow() {
+    var row = document.getElementById("assetRow"); // find row to copy
+    var table = document.getElementById("assetTable"); // find table to append to
+    var clone = row.cloneNode(true); // copy children too
+    clone.id = "newID"; // change id or other attributes/contents
+    table.appendChild(clone); // add new row to end of table
+}
