@@ -8,10 +8,10 @@ class Funds:
         self.last_update = time()
         self.raw = requests.get(
             f'https://app.myinvestor.es/myinvestor-server/rest/public/fondos/find-fondos?tipo=TODOS&token={self.__token}').json()
-        self.clean = [{'isin': self.raw[i]['codigoIsin'], 
+        self.basic = [{'isin': self.raw[i]['codigoIsin'], 
                        'name': self.raw[i]['nombre'], 
                        'category': self.raw[i] ['categoria'] if 'categoria' in self.raw[i] else None} for i in range(len(self.raw))]
-        self.clean.sort(key = lambda e: e['isin'])
+        self.basic.sort(key = lambda e: e['name'])
 
     def update(self):
         if time() - self.last_update > 3600:
