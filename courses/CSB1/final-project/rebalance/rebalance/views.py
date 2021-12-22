@@ -22,12 +22,13 @@ def dashboard():
 #@login_required
 def ideal_portfolio():
     """Logic for ideal portfolio"""
-    FUNDS.update()
-    return render_template("ideal-portfolio.html", user=current_user, funds=FUNDS.clean)
 
-
-@views.route('/query', methods=['GET'])
-@login_required
-def query():
+    # Update fund record from MyInvestor
     FUNDS.update()
-    return FUNDS.clean[0]
+    
+    if request.method == 'POST':
+        # TODO: check if portfolio sums to 100%
+        # TODO: store in db
+        return "temp"
+
+    return render_template("ideal-portfolio.html", user=current_user, funds=FUNDS.basic)

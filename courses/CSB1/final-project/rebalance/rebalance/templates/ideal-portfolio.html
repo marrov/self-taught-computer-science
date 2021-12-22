@@ -28,7 +28,7 @@ Ideal portfolio
                             <td>
                                 <select name="fund">
                                 {% for fund in funds %}
-                                <option value="{{fund.isin}}">({{fund.isin}}) {{fund.name}}</option>
+                                <option value="{{fund.isin}}">{{fund.name}} ({{fund.isin}})</option>
                                 {% endfor %}
                                 </select>
                             </td>
