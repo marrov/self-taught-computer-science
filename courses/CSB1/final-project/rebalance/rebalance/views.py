@@ -29,6 +29,6 @@ def ideal_portfolio():
     if request.method == 'POST':
         # TODO: check if portfolio sums to 100%
         # TODO: store in db
-        return "temp"
+        return request.form
 
     return render_template("ideal-portfolio.html", user=current_user, funds=FUNDS.basic)
