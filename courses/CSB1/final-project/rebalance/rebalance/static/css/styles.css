@@ -11800,3 +11800,7 @@ footer.footer {
   position: absolute;
   width: 100%;
 }
+
+#flaskalerts-dashboard {
+  position: absolute;
+}
