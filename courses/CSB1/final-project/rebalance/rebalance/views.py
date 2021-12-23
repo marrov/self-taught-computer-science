@@ -40,16 +40,32 @@ def ideal_portfolio():
         for fund_id in fund_ids:
             funds.append(Fund.query.filter_by(id = fund_id).first().isin)
 
+        # Get other info for display of user's funds (e.g. fund name)
+
         # IF POST, delete sotred ideal portfolio
         if request.method == 'POST':
 
-            #db.session.add(UserWithFund(user=current_user, fund=Fund.query.filter_by(
-            #    isin=fund).first(), allocation=allocation))
-            #db.session.commit()
+            # Delete relationship between user and funds
+            for item in userwithfund:
+                db.session.delete(item)
+            db.session.commit()
+
+            # TODO: Delete funds that are not being owned by any user - TEST THIS
+            # Retrieve all unique fund ids in UserWithFunds database into list
+            owned_fund_ids = [item.fund_id for item in UserWithFund.query.all()]
+
+            # Get fund items from Fund database
+            stored_funds = Fund.query.all()
+
+            # Delete all funds from B not in A
+            for stored_fund in stored_funds:
+                if stored_fund.id not in owned_fund_ids:
+                    db.session.delete(stored_fund)
+            db.session.commit()
 
             return redirect(url_for('views.ideal_portfolio'))
 
-        # Else (GET), show portfolio
+        # Otherwise (i.e. GET), show user's portfolio
         return render_template('ideal-portfolio.html', user=current_user, user_data=zip(funds, allocations), ideal_portfolio_exists=ideal_portfolio_exists)
     else:
         if request.method == 'POST':
