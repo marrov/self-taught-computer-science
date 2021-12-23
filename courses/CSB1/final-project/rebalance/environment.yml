@@ -1,6 +1,5 @@
-name: web
+name: conda
 channels:
-  - cantera
   - conda-forge
   - defaults
 dependencies:
@@ -196,4 +195,3 @@ dependencies:
   - zeromq=4.3.2=he1b5a44_2
   - zipp=3.1.0=py_0
   - zlib=1.2.11=h7b6447c_3
-prefix: /home/marc/miniconda3/envs/conda
