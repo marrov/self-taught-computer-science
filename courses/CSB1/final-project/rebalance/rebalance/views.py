@@ -19,6 +19,13 @@ def dashboard():
     """Logic for main dashboard"""
     return render_template("dashboard.html", user=current_user)
 
+
+@views.route('/real-portfolio', methods=['GET', 'POST'])
+@login_required
+def real_portfolio():
+    """Logic for real iportfolio"""
+    return render_template("real-portfolio.html", user=current_user)
+
 @views.route('/ideal-portfolio', methods=['GET', 'POST'])
 @login_required
 def ideal_portfolio():
