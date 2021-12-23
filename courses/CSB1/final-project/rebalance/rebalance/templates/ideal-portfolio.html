@@ -6,8 +6,13 @@ Ideal portfolio
 
 {% block main %}
 
+<p>User {{user.username}} has an ideal portfolio stored? {{ideal_portfolio_exists}}</p>
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Ideal portfolio</h1>
+    {% if ideal_portfolio_exists %}
+    <p>Ideal portfolio exists for user {{user.username}}</p>
+    {% else %}
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Define your ideal portfolio here</li>
     </ol>
@@ -56,6 +61,7 @@ Ideal portfolio
             </div>
         </form>
     </div>
+    {% endif %}
 </div>
 
 {% endblock %}
