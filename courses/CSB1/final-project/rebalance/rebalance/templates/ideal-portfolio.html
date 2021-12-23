@@ -6,17 +6,47 @@ Ideal portfolio
 
 {% block main %}
 
-<p>User {{user.username}} has an ideal portfolio stored? {{ideal_portfolio_exists}}</p>
-
 <div class="container-fluid px-4">
     <h1 class="mt-4">Ideal portfolio</h1>
+
     {% if ideal_portfolio_exists %}
-    <p>Ideal portfolio exists for user {{user.username}}</p>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">You can view and delete your saved ideal portfolio here</li>
+    </ol>
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Name (ISIN)</th>
+                            <th scope="col">Target Allocation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fund, allocation in user_data %}
+                        <tr>
+                            <td>{{fund}}</td>
+                            <td>{{allocation}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <form action="/ideal-portfolio" method="post">
+                <button class="btn btn-danger" type="submit">Delete portfolio</button>
+            </form>
+        </div>
+    </div>
+
     {% else %}
+
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Define your ideal portfolio here</li>
     </ol>
-    
+
     <div class="row">
         <form action="/ideal-portfolio" method="post">
             <div class="col">
@@ -33,23 +63,26 @@ Ideal portfolio
                             <tr id="assetRow-0">
                                 <td>
                                     <select class="form-select" id="fund" name="fund-0">
-                                    {% for fund in funds %}
-                                    <option value="{{fund.isin}}">{{fund.name}} ({{fund.isin}})</option>
-                                    {% endfor %}
+                                        {% for fund in funds %}
+                                        <option value="{{fund.isin}}">{{fund.name}} ({{fund.isin}})</option>
+                                        {% endfor %}
                                     </select>
                                 </td>
                                 <td>
-                                    <input class="form-control" id="allocation" name="allocation-0" type="number" min="0" max="100" placeholder="%">
+                                    <input class="form-control" id="allocation" name="allocation-0" type="number"
+                                        min="0" max="100" placeholder="%">
                                 </td>
                                 <td>
                                     <ul class="list-inline m-0">
                                         <li class="list-inline-item">
-                                            <button id="addAssetRow" class="btn btn-success btn-lg" type="button" data-toggle="tooltip" data-placement="top"
-                                                title="Add" onclick="addRow()"><i class="fa fa-plus"></i></button>
+                                            <button id="addAssetRow" class="btn btn-success btn-lg" type="button"
+                                                data-toggle="tooltip" data-placement="top" title="Add"
+                                                onclick="addRow()"><i class="fa fa-plus"></i></button>
                                         </li>
                                         <li class="list-inline-item">
-                                            <button id="deleteAssetRow" class="btn btn-danger btn-lg" type="button" data-toggle="tooltip" data-placement="top"
-                                                title="Delete" onclick="deleteRow(this)"><i class="fa fa-trash-alt"></i></button>
+                                            <button id="deleteAssetRow" class="btn btn-danger btn-lg" type="button"
+                                                data-toggle="tooltip" data-placement="top" title="Delete"
+                                                onclick="deleteRow(this)"><i class="fa fa-trash-alt"></i></button>
                                         </li>
                                     </ul>
                                 </td>

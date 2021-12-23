@@ -28,14 +28,29 @@ def ideal_portfolio():
     FUNDS.update()
 
     # Check if user already has an ideal portfolio
-    ideal_portfolio_exists = (UserWithFund.query.filter_by(user_id = current_user.id).first() != None)
+    ideal_portfolio_exists = (UserWithFund.query.filter_by(user_id = current_user.id).first() is not None)
 
     if ideal_portfolio_exists:
 
-        # IF POST, delete ideal
+        # Get the current user's funds and allocations stored in the databases
+        userwithfund = UserWithFund.query.filter_by(user_id = current_user.id).all()
+        allocations = [item.allocation for item in userwithfund]
+        fund_ids = [item.fund_id for item in userwithfund]
+        funds = []
+        for fund_id in fund_ids:
+            funds.append(Fund.query.filter_by(id = fund_id).first().isin)
+
+        # IF POST, delete sotred ideal portfolio
+        if request.method == 'POST':
+
+            #db.session.add(UserWithFund(user=current_user, fund=Fund.query.filter_by(
+            #    isin=fund).first(), allocation=allocation))
+            #db.session.commit()
+
+            return redirect(url_for('views.ideal_portfolio'))
 
         # Else (GET), show portfolio
-        return render_template('ideal-portfolio.html', user=current_user, funds=FUNDS.basic, ideal_portfolio_exists=ideal_portfolio_exists)
+        return render_template('ideal-portfolio.html', user=current_user, user_data=zip(funds, allocations), ideal_portfolio_exists=ideal_portfolio_exists)
     else:
         if request.method == 'POST':
             # Get number of assets 
