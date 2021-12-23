@@ -50,7 +50,7 @@ def ideal_portfolio():
                 db.session.delete(item)
             db.session.commit()
 
-            # TODO: Delete funds that are not being owned by any user - TEST THIS
+            # Delete funds that are not being owned by any user
             # Retrieve all unique fund ids in UserWithFunds database into list
             owned_fund_ids = [item.fund_id for item in UserWithFund.query.all()]
 
@@ -63,12 +63,23 @@ def ideal_portfolio():
                     db.session.delete(stored_fund)
             db.session.commit()
 
+            flash('Portfolio deleted successfully', category='success')
             return redirect(url_for('views.ideal_portfolio'))
 
+        # Get fund data from raw data through isin into lists
+        names = [];  urls = []; categories = []; ter = []
+        for fund in funds:
+            names.append(
+                next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["nombre"])
+            urls.append(
+                next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["urlKiid"])
+
         # Otherwise (i.e. GET), show user's portfolio
-        return render_template('ideal-portfolio.html', user=current_user, user_data=zip(funds, allocations), ideal_portfolio_exists=ideal_portfolio_exists)
+        return render_template('ideal-portfolio.html', user=current_user, user_data=zip(funds, names, urls, allocations), ideal_portfolio_exists=ideal_portfolio_exists)
+
     else:
         if request.method == 'POST':
+
             # Get number of assets 
             n_assets = int(len(request.form)/2)
 
@@ -98,6 +109,7 @@ def ideal_portfolio():
                         isin=fund).first(), allocation=allocation))
                 db.session.commit()
 
+                flash('Portfolio created successfully', category='success')
                 return redirect(url_for('views.ideal_portfolio'))
-                
+        
         return render_template('ideal-portfolio.html', user=current_user, funds=FUNDS.basic, ideal_portfolio_exists=ideal_portfolio_exists)

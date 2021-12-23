@@ -16,18 +16,25 @@ Ideal portfolio
     </ol>
 
     <div class="row">
-        <div class="col">
-            <div class="table-responsive">
-                <table class="table table-hover">
+        <div class="col-xl-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Current ideal portfolio
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
                     <thead class="table-light">
                         <tr>
-                            <th scope="col">Name (ISIN)</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">ISIN</th>
                             <th scope="col">Target Allocation (%)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for fund, allocation in user_data %}
+                        {% for fund, name, url, allocation in user_data %}
                         <tr>
+                            <td> <a href={{url}}>{{name}}</a></td>
                             <td>{{fund}}</td>
                             <td>{{allocation}}</td>
                         </tr>
@@ -35,10 +42,13 @@ Ideal portfolio
                     </tbody>
                 </table>
             </div>
-            <form action="/ideal-portfolio" method="post">
-                <button class="btn btn-danger" type="submit">Delete portfolio</button>
-            </form>
         </div>
+    </div>
+
+    <div class="row">
+        <form action="/ideal-portfolio" method="post">
+            <button class="btn btn-danger" type="submit">Delete portfolio</button>
+        </form>
     </div>
 
     {% else %}
@@ -49,9 +59,15 @@ Ideal portfolio
 
     <div class="row">
         <form action="/ideal-portfolio" method="post">
-            <div class="col">
-                <div class="table-responsive">
-                    <table class="table table-hover">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Ideal portfolio builder
+                    </div>
+                    <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
                         <thead class="table-light">
                             <tr>
                                 <th scope="col">Name (ISIN)</th>
@@ -89,9 +105,10 @@ Ideal portfolio
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
-                <button class="btn btn-primary" type="submit">Save portfolio</button>
             </div>
+            <button class="btn btn-primary" type="submit">Save portfolio</button>
         </form>
     </div>
     {% endif %}
