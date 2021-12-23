@@ -24,5 +24,5 @@ class User(db.Model, UserMixin):
 class Fund(db.Model):
     __tablename__ = 'fund'
     id = db.Column(db.Integer, primary_key=True)
-    fund_isin = db.Column(db.String(20), unique=True)
+    isin = db.Column(db.String(20), unique=True)
     users = db.relationship("UserWithFund", back_populates="fund")
