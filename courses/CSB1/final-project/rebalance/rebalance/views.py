@@ -33,33 +33,60 @@ def real_portfolio():
     real_portfolio_exists = (RealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
 
     if ideal_portfolio_exists:
+
+        # Get the current user's funds from ideal portfolio
+        idealportfolio = IdealPortfolio.query.filter_by(user_id = current_user.id).all()
+        fund_ids = [item.fund_id for item in idealportfolio]
+        funds = []
+        for fund_id in fund_ids:
+            funds.append(Fund.query.filter_by(id = fund_id).first().isin)
+
+        # Get funds' names from raw data through isin into a list
+        names = [];  urls = [];
+        for fund in funds:
+            names.append(
+                next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["nombre"])
+            urls.append(
+                next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["urlKiid"])
+
         if real_portfolio_exists:
+
+            # Get the current user's  real and ideal allocations
+            realportfolio = RealPortfolio.query.filter_by(user_id = current_user.id).all()
+            real_allocations = [item.allocation for item in realportfolio]
+            ideal_allocations = [item.allocation for item in idealportfolio]
+
             if request.method == 'POST':
                 # Delete saved real portfolio
                 return "delete saved real portfolio"
             else:
                 # Show real portfolio
-                return render_template("real-portfolio.html", user=current_user, real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
+                return render_template("real-portfolio.html", user=current_user, user_data=zip(funds, names, urls, real_allocations, ideal_allocations), real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
         else:
             if request.method == 'POST':
                 # store real portfolio that user has just defined
-                return "store real portfolio that user has just defined"
+                
+                # Get form data into list
+                n_assets = len(request.form)
+                allocations = []
+                for i in range(n_assets):
+                    allocations.append(float(request.form.get('allocation-' + str(i))))
+
+                # Check if real portfolio allocations sum to 100%
+                if sum(allocations) != 100:
+                    flash('Asset allocations must sum to 100%', category='error')
+                else:
+                    # Store real portfolio relationship in database
+                    for (fund, allocation) in zip(funds, allocations):
+                        #if not Fund.query.filter_by(isin=fund).first():
+                        db.session.add(RealPortfolio(user_real=current_user, fund_real=Fund.query.filter_by(
+                            isin=fund).first(), allocation=allocation))
+                    db.session.commit()
+                    flash('Portfolio created successfully', category='success')
+                
+                return redirect(url_for('views.real_portfolio'))
             else:
                 # Show real portfolio builder
-
-                # Get the current user's funds from ideal portfolio
-                idealportfolio = IdealPortfolio.query.filter_by(user_id = current_user.id).all()
-                fund_ids = [item.fund_id for item in idealportfolio]
-                funds = []
-                for fund_id in fund_ids:
-                    funds.append(Fund.query.filter_by(id = fund_id).first().isin)
-
-                # Get funds' names from raw data through isin into a list
-                names = []; 
-                for fund in funds:
-                    names.append(
-                        next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["nombre"])
-
                 return render_template("real-portfolio.html", user=current_user, user_data = zip(funds, names), real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
     else:
         # Show danger card instructing user to make an ideal portfolio first
@@ -146,7 +173,7 @@ def ideal_portfolio():
                         db.session.add(Fund(isin = fund))
                 db.session.commit()
 
-                # Store user/fund relationship in database
+                # Store ideal portfolio relationship in database
                 for (fund, allocation) in zip(funds, allocations):
                     #if not Fund.query.filter_by(isin=fund).first():
                     db.session.add(IdealPortfolio(user_ideal=current_user, fund_ideal=Fund.query.filter_by(

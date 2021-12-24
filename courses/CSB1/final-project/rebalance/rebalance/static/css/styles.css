@@ -11804,3 +11804,11 @@ footer.footer {
 #flaskalerts-dashboard {
   position: relative;
 }
+
+.negative {
+  color: red;
+}
+
+.positive {
+  color: green;
+}
