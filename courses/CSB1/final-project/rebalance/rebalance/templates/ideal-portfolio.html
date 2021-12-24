@@ -23,24 +23,27 @@ Ideal portfolio
                     Current ideal portfolio
                 </div>
                 <div class="card-body">
-                    <table id="datatablesSimple">
-                    <thead class="table-light">
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">ISIN</th>
-                            <th scope="col">Target Allocation (%)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for fund, name, url, allocation in user_data %}
-                        <tr>
-                            <td> <a href={{url}}>{{name}}</a></td>
-                            <td>{{fund}}</td>
-                            <td>{{allocation}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="datatablesSimple">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">ISIN</th>
+                                    <th scope="col">Target Allocation (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for fund, name, url, allocation in user_data %}
+                                <tr>
+                                    <td> <a href={{url}}>{{name}}</a></td>
+                                    <td>{{fund}}</td>
+                                    <td>{{allocation}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -66,49 +69,51 @@ Ideal portfolio
                         Ideal portfolio builder
                     </div>
                     <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th scope="col">Name (ISIN)</th>
-                                <th scope="col">Target Allocation (%)</th>
-                                <th scope="col" style="min-width: 132px;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="assetTable">
-                            <tr id="assetRow-0">
-                                <td>
-                                    <select class="form-select" id="fund" name="fund-0">
-                                        {% for fund in funds %}
-                                        <option value="{{fund.isin}}">{{fund.name}} ({{fund.isin}})</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
-                                <td>
-                                    <input class="form-control" id="allocation" name="allocation-0" type="number"
-                                        min="0" max="100" placeholder="%">
-                                </td>
-                                <td>
-                                    <ul class="list-inline m-0">
-                                        <li class="list-inline-item">
-                                            <button id="addAssetRow" class="btn btn-success btn-lg" type="button"
-                                                data-toggle="tooltip" data-placement="top" title="Add"
-                                                onclick="addRow()"><i class="fa fa-plus"></i></button>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <button id="deleteAssetRow" class="btn btn-danger btn-lg" type="button"
-                                                data-toggle="tooltip" data-placement="top" title="Delete"
-                                                onclick="deleteRow(this)"><i class="fa fa-trash-alt"></i></button>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Name (ISIN)</th>
+                                        <th scope="col">Target Allocation (%)</th>
+                                        <th scope="col" style="min-width: 132px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="assetTable">
+                                    <tr id="assetRow-0">
+                                        <td>
+                                            <select class="form-select" id="fund" name="fund-0">
+                                                {% for fund in funds %}
+                                                <option value="{{fund.isin}}">{{fund.name}} ({{fund.isin}})</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" id="allocation" name="allocation-0"
+                                                type="number" min="0" max="100" placeholder="%">
+                                        </td>
+                                        <td>
+                                            <ul class="list-inline m-0">
+                                                <li class="list-inline-item">
+                                                    <button id="addAssetRow" class="btn btn-success btn-lg"
+                                                        type="button" data-toggle="tooltip" data-placement="top"
+                                                        title="Add" onclick="addRow()"><i
+                                                            class="fa fa-plus"></i></button>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <button id="deleteAssetRow" class="btn btn-danger btn-lg"
+                                                        type="button" data-toggle="tooltip" data-placement="top"
+                                                        title="Delete" onclick="deleteRow(this)"><i
+                                                            class="fa fa-trash-alt"></i></button>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <button class="btn btn-primary" type="submit">Save portfolio</button>
+                <button class="btn btn-primary" type="submit">Save portfolio</button>
         </form>
     </div>
     {% endif %}
