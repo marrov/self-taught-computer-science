@@ -33,9 +33,9 @@ Ideal portfolio
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for fund, name, url, allocation in user_data %}
+                                {% for fund, name, allocation in user_data %}
                                 <tr>
-                                    <td> <a href={{url}}>{{name}}</a></td>
+                                    <td>{{name}}</td>
                                     <td>{{fund}}</td>
                                     <td>{{allocation}}</td>
                                 </tr>

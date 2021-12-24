@@ -37,9 +37,9 @@ Real portfolio
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for fund, name, url, real_allocation, ideal_allocation in user_data %}
+                                    {% for fund, name, real_allocation, ideal_allocation in user_data %}
                                     <tr>
-                                        <td> <a href={{url}}>{{name}}</a></td>
+                                        <td>{{name}}</td>
                                         <td>{{fund}}</td>
                                         <td>{{real_allocation}}</td>
                                         <td>{{ideal_allocation}}</td>

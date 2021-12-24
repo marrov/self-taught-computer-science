@@ -42,12 +42,10 @@ def real_portfolio():
             funds.append(Fund.query.filter_by(id = fund_id).first().isin)
 
         # Get funds' names from raw data through isin into a list
-        names = [];  urls = [];
+        names = [];
         for fund in funds:
             names.append(
                 next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["nombre"])
-            urls.append(
-                next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["urlKiid"])
 
         if real_portfolio_exists:
 
@@ -58,10 +56,19 @@ def real_portfolio():
 
             if request.method == 'POST':
                 # Delete saved real portfolio
+
+                # Delete relationship between user and funds
+                for item in realportfolio:
+                    db.session.delete(item)
+                db.session.commit()
+
+                flash('Portfolio deleted successfully', category='success')
+                return redirect(url_for('views.real_portfolio'))
+
                 return "delete saved real portfolio"
             else:
                 # Show real portfolio
-                return render_template("real-portfolio.html", user=current_user, user_data=zip(funds, names, urls, real_allocations, ideal_allocations), real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
+                return render_template("real-portfolio.html", user=current_user, user_data=zip(funds, names, real_allocations, ideal_allocations), real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
         else:
             if request.method == 'POST':
                 # store real portfolio that user has just defined
@@ -100,8 +107,9 @@ def ideal_portfolio():
     # Update fund record from MyInvestor API
     FUNDS.update()
 
-    # Check if user already has an ideal portfolio
+    # Check if user has an ideal and/or real portfolio
     ideal_portfolio_exists = (IdealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
+    real_portfolio_exists = (RealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
 
     if ideal_portfolio_exists:
 
@@ -115,38 +123,39 @@ def ideal_portfolio():
 
         # IF POST, delete sotred ideal portfolio
         if request.method == 'POST':
+            
+            if real_portfolio_exists:
+                flash('Delete your real portfolio before deleting your ideal portfolio', category='error')
+            else:
+                # Delete relationship between user and funds
+                for item in idealportfolio:
+                    db.session.delete(item)
+                db.session.commit()
 
-            # Delete relationship between user and funds
-            for item in idealportfolio:
-                db.session.delete(item)
-            db.session.commit()
+                # Delete funds that are not being owned by any user
+                # Retrieve all unique fund ids in idealportfolios database into list
+                owned_fund_ids = [item.fund_id for item in IdealPortfolio.query.all()]
 
-            # Delete funds that are not being owned by any user
-            # Retrieve all unique fund ids in idealportfolios database into list
-            owned_fund_ids = [item.fund_id for item in IdealPortfolio.query.all()]
+                # Get fund items from Fund database
+                stored_funds = Fund.query.all()
 
-            # Get fund items from Fund database
-            stored_funds = Fund.query.all()
+                # Delete all funds from B not in A
+                for stored_fund in stored_funds:
+                    if stored_fund.id not in owned_fund_ids:
+                        db.session.delete(stored_fund)
+                db.session.commit()
 
-            # Delete all funds from B not in A
-            for stored_fund in stored_funds:
-                if stored_fund.id not in owned_fund_ids:
-                    db.session.delete(stored_fund)
-            db.session.commit()
-
-            flash('Portfolio deleted successfully', category='success')
+                flash('Portfolio deleted successfully', category='success')
             return redirect(url_for('views.ideal_portfolio'))
 
         # Get fund data for displaying portfolio from raw data through isin into lists
-        names = [];  urls = []; categories = []; ter = []
+        names = []; 
         for fund in funds:
             names.append(
                 next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["nombre"])
-            urls.append(
-                next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["urlKiid"])
 
         # Otherwise (i.e. GET), show user's portfolio
-        return render_template('ideal-portfolio.html', user=current_user, user_data=zip(funds, names, urls, allocations), ideal_portfolio_exists=ideal_portfolio_exists)
+        return render_template('ideal-portfolio.html', user=current_user, user_data=zip(funds, names, allocations), ideal_portfolio_exists=ideal_portfolio_exists)
 
     else:
         if request.method == 'POST':
