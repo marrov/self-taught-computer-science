@@ -64,10 +64,10 @@ Real portfolio
                                     <tbody>
                                         {% for fund, name in user_data %}
                                         <tr>
-                                            <td>{{name}}</a></td>
-                                            <td>{{fund}}</td>
+                                            <td class="align-middle">{{name}}</a></td>
+                                            <td class="align-middle">{{fund}}</td>
                                             <td>
-                                                <input class="form-control" id="allocation" name="allocation" type="number" min="0" max="100" placeholder="%" required>
+                                                <input class="form-control form-control-sm" id="allocation" name="allocation" type="number" min="0" max="100" placeholder="%" required>
                                             </td>
                                         </tr>
                                         {% endfor %}

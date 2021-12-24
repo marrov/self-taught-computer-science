@@ -1968,7 +1968,7 @@ progress {
   width: 100%;
   margin-bottom: 1rem;
   color: #212529;
-  vertical-align: top;
+  vertical-align: middle;
   border-color: #dee2e6;
 }
 .table > :not(caption) > * > * {
@@ -1978,10 +1978,10 @@ progress {
   box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
 }
 .table > tbody {
-  vertical-align: inherit;
+  vertical-align: middle;
 }
 .table > thead {
-  vertical-align: bottom;
+  vertical-align: middle;
 }
 .table > :not(:first-child) {
   border-top: 2px solid currentColor;
