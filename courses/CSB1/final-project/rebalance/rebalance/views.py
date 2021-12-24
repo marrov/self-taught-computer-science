@@ -1,5 +1,5 @@
 from . import db, FUNDS
-from .models import IdealPortfolio, Fund
+from .models import IdealPortfolio, RealPortfolio, Fund
 
 from flask_login import login_required, current_user
 from flask import Blueprint, render_template, request, flash, redirect, url_for
@@ -25,13 +25,45 @@ def dashboard():
 def real_portfolio():
     """Logic for real iportfolio"""
 
-    # Check if user has an ideal portfolio
+    # Update fund record from MyInvestor API
+    FUNDS.update()
+
+    # Check if user has an ideal and/or real portfolio
     ideal_portfolio_exists = (IdealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
+    real_portfolio_exists = (RealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
 
-    # Check if user has a reak portfolio
-    real_portfolio_exists = False
+    if ideal_portfolio_exists:
+        if real_portfolio_exists:
+            if request.method == 'POST':
+                # Delete saved real portfolio
+                return "delete saved real portfolio"
+            else:
+                # Show real portfolio
+                return render_template("real-portfolio.html", user=current_user, real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
+        else:
+            if request.method == 'POST':
+                # store real portfolio that user has just defined
+                return "store real portfolio that user has just defined"
+            else:
+                # Show real portfolio builder
 
-    return render_template("real-portfolio.html", user=current_user, real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
+                # Get the current user's funds from ideal portfolio
+                idealportfolio = IdealPortfolio.query.filter_by(user_id = current_user.id).all()
+                fund_ids = [item.fund_id for item in idealportfolio]
+                funds = []
+                for fund_id in fund_ids:
+                    funds.append(Fund.query.filter_by(id = fund_id).first().isin)
+
+                # Get funds' names from raw data through isin into a list
+                names = []; 
+                for fund in funds:
+                    names.append(
+                        next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["nombre"])
+
+                return render_template("real-portfolio.html", user=current_user, user_data = zip(funds, names), real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
+    else:
+        # Show danger card instructing user to make an ideal portfolio first
+        return render_template("real-portfolio.html", user=current_user, real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
 
 @views.route('/ideal-portfolio', methods=['GET', 'POST'])
 @login_required
@@ -53,8 +85,6 @@ def ideal_portfolio():
         funds = []
         for fund_id in fund_ids:
             funds.append(Fund.query.filter_by(id = fund_id).first().isin)
-
-        # Get other info for display of user's funds (e.g. fund name)
 
         # IF POST, delete sotred ideal portfolio
         if request.method == 'POST':
@@ -80,7 +110,7 @@ def ideal_portfolio():
             flash('Portfolio deleted successfully', category='success')
             return redirect(url_for('views.ideal_portfolio'))
 
-        # Get fund data from raw data through isin into lists
+        # Get fund data for displaying portfolio from raw data through isin into lists
         names = [];  urls = []; categories = []; ter = []
         for fund in funds:
             names.append(
@@ -119,7 +149,7 @@ def ideal_portfolio():
                 # Store user/fund relationship in database
                 for (fund, allocation) in zip(funds, allocations):
                     #if not Fund.query.filter_by(isin=fund).first():
-                    db.session.add(IdealPortfolio(user=current_user, fund=Fund.query.filter_by(
+                    db.session.add(IdealPortfolio(user_ideal=current_user, fund_ideal=Fund.query.filter_by(
                         isin=fund).first(), allocation=allocation))
                 db.session.commit()
 
