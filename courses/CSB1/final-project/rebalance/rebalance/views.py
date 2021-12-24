@@ -1,5 +1,5 @@
 from . import db, FUNDS
-from .models import UserWithFund, Fund
+from .models import IdealPortfolio, Fund
 
 from flask_login import login_required, current_user
 from flask import Blueprint, render_template, request, flash, redirect, url_for
@@ -26,7 +26,7 @@ def real_portfolio():
     """Logic for real iportfolio"""
 
     # Check if user already has an ideal portfolio
-    ideal_portfolio_exists = (UserWithFund.query.filter_by(user_id = current_user.id).first() is not None)
+    ideal_portfolio_exists = (IdealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
 
     return render_template("real-portfolio.html", user=current_user, ideal_portfolio_exists = ideal_portfolio_exists)
 
@@ -39,14 +39,14 @@ def ideal_portfolio():
     FUNDS.update()
 
     # Check if user already has an ideal portfolio
-    ideal_portfolio_exists = (UserWithFund.query.filter_by(user_id = current_user.id).first() is not None)
+    ideal_portfolio_exists = (IdealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
 
     if ideal_portfolio_exists:
 
         # Get the current user's funds and allocations stored in the databases
-        userwithfund = UserWithFund.query.filter_by(user_id = current_user.id).all()
-        allocations = [item.allocation for item in userwithfund]
-        fund_ids = [item.fund_id for item in userwithfund]
+        idealportfolio = IdealPortfolio.query.filter_by(user_id = current_user.id).all()
+        allocations = [item.allocation for item in idealportfolio]
+        fund_ids = [item.fund_id for item in idealportfolio]
         funds = []
         for fund_id in fund_ids:
             funds.append(Fund.query.filter_by(id = fund_id).first().isin)
@@ -57,13 +57,13 @@ def ideal_portfolio():
         if request.method == 'POST':
 
             # Delete relationship between user and funds
-            for item in userwithfund:
+            for item in idealportfolio:
                 db.session.delete(item)
             db.session.commit()
 
             # Delete funds that are not being owned by any user
-            # Retrieve all unique fund ids in UserWithFunds database into list
-            owned_fund_ids = [item.fund_id for item in UserWithFund.query.all()]
+            # Retrieve all unique fund ids in idealportfolios database into list
+            owned_fund_ids = [item.fund_id for item in IdealPortfolio.query.all()]
 
             # Get fund items from Fund database
             stored_funds = Fund.query.all()
@@ -116,7 +116,7 @@ def ideal_portfolio():
                 # Store user/fund relationship in database
                 for (fund, allocation) in zip(funds, allocations):
                     #if not Fund.query.filter_by(isin=fund).first():
-                    db.session.add(UserWithFund(user=current_user, fund=Fund.query.filter_by(
+                    db.session.add(IdealPortfolio(user=current_user, fund=Fund.query.filter_by(
                         isin=fund).first(), allocation=allocation))
                 db.session.commit()
 
