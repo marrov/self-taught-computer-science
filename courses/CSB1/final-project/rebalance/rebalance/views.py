@@ -24,7 +24,11 @@ def dashboard():
 @login_required
 def real_portfolio():
     """Logic for real iportfolio"""
-    return render_template("real-portfolio.html", user=current_user)
+
+    # Check if user already has an ideal portfolio
+    ideal_portfolio_exists = (UserWithFund.query.filter_by(user_id = current_user.id).first() is not None)
+
+    return render_template("real-portfolio.html", user=current_user, ideal_portfolio_exists = ideal_portfolio_exists)
 
 @views.route('/ideal-portfolio', methods=['GET', 'POST'])
 @login_required

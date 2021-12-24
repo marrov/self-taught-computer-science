@@ -9,6 +9,12 @@ Real portfolio
 <div class="container-fluid px-4">
     <h1 class="mt-4">Real portfolio</h1>
 
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Define your real portfolio here</li>
+    </ol>
+
+    {% if ideal_portfolio_exists %}
+
     <div class="row">
         <div class="col-xl-12">
             <div class="card mb-4">
@@ -22,6 +28,23 @@ Real portfolio
             </div>
         </div>
     </div>
+
+    {% else %}
+
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">No ideal portfolio was found, create one first</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{{url_for('views.ideal_portfolio')}}">Go to ideal portfolio builder</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
 </div>
 
 {% endblock %}
