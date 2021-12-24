@@ -33,7 +33,7 @@ Real portfolio
                                         <th scope="col">ISIN</th>
                                         <th scope="col">Current Allocation (%)</th>
                                         <th scope="col">Target Allocation (%)</th>
-                                        <th scope="col">Difference</th>
+                                        <th scope="col">Difference (%)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -43,7 +43,7 @@ Real portfolio
                                         <td>{{fund}}</td>
                                         <td>{{real_allocation}}</td>
                                         <td>{{ideal_allocation}}</td>
-                                        <td {% if real_allocation - ideal_allocation > 0 %} class="positive" {% else %} class="negative" {% endif %} >{{ real_allocation - ideal_allocation }}</td>
+                                        <td {% if real_allocation - ideal_allocation > 0 %} class="positive" {% else %} class="negative" {% endif %} >{{ (real_allocation-ideal_allocation)|round(2, 'common') }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -81,7 +81,7 @@ Real portfolio
                                         <tr>
                                             <th scope="col">Name</th>
                                             <th scope="col">ISIN</th>
-                                            <th scope="col">Current Allocation (%)</th>
+                                            <th scope="col">Current Ammount (€)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -90,7 +90,7 @@ Real portfolio
                                             <td class="align-middle">{{name}}</a></td>
                                             <td class="align-middle">{{fund}}</td>
                                             <td>
-                                                <input class="form-control form-control-sm" id="allocation" name="allocation-{{loop.index0}}" type="number" min="0" max="100" placeholder="%" required>
+                                                <input class="form-control form-control-sm" id="ammount" name="ammount-{{loop.index0}}" type="number" min="0" step="0.01" placeholder="€" required>
                                             </td>
                                         </tr>
                                         {% endfor %}

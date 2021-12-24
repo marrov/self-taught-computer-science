@@ -75,12 +75,16 @@ def real_portfolio():
                 
                 # Get form data into list
                 n_assets = len(request.form)
-                allocations = []
+                ammounts = []
                 for i in range(n_assets):
-                    allocations.append(float(request.form.get('allocation-' + str(i))))
+                    ammounts.append(float(request.form.get('ammount-' + str(i))))
+                allocations = [round(100*(ammount/sum(ammounts)), 2) for ammount in ammounts]
+
+                #TODO: Store user sum of ammount invested in User so that only allocations are necessary
+                #TODO: set invested to zero if user deletes real portfolio
 
                 # Check if real portfolio allocations sum to 100%
-                if sum(allocations) != 100:
+                if round(sum(allocations) + 0.01, 2) != 100: # HACK: VERY TEMPORARY
                     flash('Asset allocations must sum to 100%', category='error')
                 else:
                     # Store real portfolio relationship in database
