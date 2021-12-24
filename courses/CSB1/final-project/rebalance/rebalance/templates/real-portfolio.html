@@ -9,27 +9,55 @@ Real portfolio
 <div class="container-fluid px-4">
     <h1 class="mt-4">Real portfolio</h1>
 
+    {% if ideal_portfolio_exists %}
+
+        {% if real_portfolio_exists %}
+
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">You can view and delete your saved real portfolio here</li>
+        </ol>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Current real portfolio
+                    </div>
+                    <div class="card-body">
+                        <p>Placeholder</p>
+                    </div>       
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Define your real portfolio here</li>
+        </ol>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Real portfolio builder
+                    </div>
+                    <div class="card-body">
+                        <p>Placeholder</p>
+                    </div>       
+                </div>
+            </div>
+        </div>
+
+        {% endif %}
+
+    {% else %}
+
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Define your real portfolio here</li>
     </ol>
-
-    {% if ideal_portfolio_exists %}
-
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                    Current real portfolio
-                </div>
-                <div class="card-body">
-                    <p>Placeholder</p>
-                </div>       
-            </div>
-        </div>
-    </div>
-
-    {% else %}
 
     <div class="row">
         <div class="col-xl-6">
