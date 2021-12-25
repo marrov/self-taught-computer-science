@@ -13,7 +13,7 @@ def home():
     return render_template("home.html", user=current_user)
 
 
-@views.route('/dashboard', methods=['GET', 'POST'])
+@views.route('/dashboard', methods=['GET'])
 @login_required
 def dashboard():
     """Logic for main dashboard"""
@@ -25,11 +25,14 @@ def dashboard():
     ideal_portfolio_exists = (IdealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
     real_portfolio_exists = (RealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
 
-    if request.method == 'POST':
-        flash('POST request was made', category='success')
-        return redirect(url_for('views.dashboard'))
-    else:
-        return render_template("dashboard.html", user=current_user, real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
+    if real_portfolio_exists and ideal_portfolio_exists:
+        # TODO: Get real and ideal allocation and (maybe?) calculate the difference
+        # TODO: get total invested ammount from current user
+        # TODO: calculate rebalance as diff_fund * total_invested (maybe in html not here)
+        # TODO: Assess what a reasonable threshold for rebalancing (maybe three tier: green (<2%) - yellow (3% to 5%) - red (>10%))
+        pass
+
+    return render_template("dashboard.html", user=current_user, real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
 
 
 @views.route('/real-portfolio', methods=['GET', 'POST'])
