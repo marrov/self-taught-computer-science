@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(MAX_LEN), unique=True)
-    invested = db.Column(db.Real, deafult=0)
+    invested = db.Column(db.Integer, nullable=True)
     password = db.Column(db.String(MAX_LEN))
     funds_ideal = db.relationship("IdealPortfolio", back_populates="user_ideal")
     funds_real = db.relationship("RealPortfolio", back_populates="user_real")
