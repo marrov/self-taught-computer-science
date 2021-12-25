@@ -1,55 +1,94 @@
 {% extends "dashboard_layout.html" %}
 
 {% block title %}
-Current portfolio
+Rebalance
 {% endblock %}
 
 {% block main %}
 
-
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Dashboard</h1>
+
+    <h1 class="mt-4">Rebalance</h1>
+
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Dashboard</li>
+        <li class="breadcrumb-item active">Rebalance your fund portfolio</li>
     </ol>
+
+    {% if ideal_portfolio_exists and real_portfolio_exists %}
+
     <div class="row">
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
-                <div class="card-body">Primary Card</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-warning text-white mb-4">
-                <div class="card-body">Warning Card</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-6">
             <div class="card bg-success text-white mb-4">
-                <div class="card-body">Success Card</div>
+                <div class="card-body">Ideal portfolio was found!</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <a class="small text-white stretched-link" href="{{url_for('views.ideal_portfolio')}}">Edit your ideal portfolio</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-danger text-white mb-4">
-                <div class="card-body">Danger Card</div>
+
+        <div class="col-xl-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Real portfolio was found!</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <a class="small text-white stretched-link" href="{{url_for('views.real_portfolio')}}">Edit your real portfolio</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
     </div>
+
+    {% elif ideal_portfolio_exists and not real_portfolio_exists %}
+
+    
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Ideal portfolio was found!</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{{url_for('views.ideal_portfolio')}}">Edit your ideal portfolio</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">No real portfolio was found, create one first</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{{url_for('views.real_portfolio')}}">Go to real portfolio builder</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">No ideal portfolio was found, create one first</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{{url_for('views.ideal_portfolio')}}">Go to ideal portfolio builder</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">No real portfolio was found, but create an ideal portfolio first</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{{url_for('views.ideal_portfolio')}}">Go to ideal portfolio builder</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
 </div>
 
 {% endblock %}

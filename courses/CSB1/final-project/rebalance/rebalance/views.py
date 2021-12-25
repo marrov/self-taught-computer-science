@@ -17,7 +17,19 @@ def home():
 @login_required
 def dashboard():
     """Logic for main dashboard"""
-    return render_template("dashboard.html", user=current_user)
+
+    # Update fund record from MyInvestor API
+    FUNDS.update()
+
+    # Check if user has an ideal and/or real portfolio
+    ideal_portfolio_exists = (IdealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
+    real_portfolio_exists = (RealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
+
+    if request.method == 'POST':
+        flash('POST request was made', category='success')
+        return redirect(url_for('views.dashboard'))
+    else:
+        return render_template("dashboard.html", user=current_user, real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
 
 
 @views.route('/real-portfolio', methods=['GET', 'POST'])
@@ -80,11 +92,13 @@ def real_portfolio():
                     ammounts.append(float(request.form.get('ammount-' + str(i))))
                 allocations = [round(100*(ammount/sum(ammounts)), 2) for ammount in ammounts]
 
-                #TODO: Store user sum of ammount invested in User so that only allocations are necessary
+                # HACK: ensures that sum of allocations is allways 100%
+                allocations[-1] = 100 - sum(allocations[0:-1])
+
                 #TODO: set invested to zero if user deletes real portfolio
 
                 # Check if real portfolio allocations sum to 100%
-                if round(sum(allocations) + 0.01, 2) != 100: # HACK: VERY TEMPORARY
+                if sum(allocations) != 100:
                     flash('Asset allocations must sum to 100%', category='error')
                 else:
                     # Store real portfolio relationship in database
@@ -92,7 +106,11 @@ def real_portfolio():
                         #if not Fund.query.filter_by(isin=fund).first():
                         db.session.add(RealPortfolio(user_real=current_user, fund_real=Fund.query.filter_by(
                             isin=fund).first(), allocation=allocation))
+
+                    # Store user sum of ammount invested in User so that only allocations are necessary
+                    current_user.invested = sum(ammounts)
                     db.session.commit()
+
                     flash('Portfolio created successfully', category='success')
                 
                 return redirect(url_for('views.real_portfolio'))
