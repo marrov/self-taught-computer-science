@@ -26,30 +26,30 @@ def dashboard():
     real_portfolio_exists = (RealPortfolio.query.filter_by(user_id = current_user.id).first() is not None)
 
     if real_portfolio_exists and ideal_portfolio_exists:
-        # TODO: Get real and ideal allocation and (maybe?) calculate the difference
-        # TODO: get total invested ammount from current user
-        # TODO: calculate rebalance as diff_fund * total_invested (maybe in html not here)
-        # TODO: Assess what a reasonable threshold for rebalancing (maybe three tier: green (<2%) - yellow (3% to 5%) - red (>10%))
-
-        # Get the current user's funds from ideal portfolio
+        
+        # Get the current user's ideal portfolio and real portfolios
         idealportfolio = IdealPortfolio.query.filter_by(user_id=current_user.id).all()
+        realportfolio = RealPortfolio.query.filter_by(user_id=current_user.id).all()
+
+        # Get fund ISIN and names from ideal portfolio
         fund_ids = [item.fund_id for item in idealportfolio]
         funds = []
         for fund_id in fund_ids:
             funds.append(Fund.query.filter_by(id=fund_id).first().isin)
-
-        # Get funds' names from raw data through isin into a list
         names = []
         for fund in funds:
             names.append(
                 next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["nombre"])
 
-        # Get the current user's  real and ideal allocations
+        # Get buy/sell ammounts from the real and ideal allocations
         realportfolio = RealPortfolio.query.filter_by(user_id=current_user.id).all()
-        real_allocations = [item.allocation for item in realportfolio]
-        ideal_allocations = [item.allocation for item in idealportfolio]
+        buy_sell = [current_user.invested * (ideal.allocation - real.allocation) 
+                    for ideal, real in zip(idealportfolio, realportfolio)]
 
-        return render_template("dashboard.html", user=current_user, max_difference = 2, real_portfolio_exists=real_portfolio_exists, ideal_portfolio_exists=ideal_portfolio_exists)
+        # Get maxiumum percentage difference from all funds
+        max_difference = max([value / current_user.invested for value in buy_sell])
+
+        return render_template("dashboard.html", user=current_user, user_data=zip(funds, names, buy_sell), max_difference=max_difference, real_portfolio_exists=real_portfolio_exists, ideal_portfolio_exists=ideal_portfolio_exists)
 
     return render_template("dashboard.html", user=current_user, real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
 
