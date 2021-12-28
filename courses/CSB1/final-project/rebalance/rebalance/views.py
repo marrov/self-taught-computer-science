@@ -13,7 +13,7 @@ def home():
     return render_template("home.html", user=current_user)
 
 
-@views.route('/dashboard', methods=['GET'])
+@views.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     """Logic for main dashboard"""
@@ -31,6 +31,15 @@ def dashboard():
         idealportfolio = IdealPortfolio.query.filter_by(user_id=current_user.id).all()
         realportfolio = RealPortfolio.query.filter_by(user_id=current_user.id).all()
 
+        if request.method == 'POST':
+
+            for real, ideal in zip(realportfolio, idealportfolio):
+                real.allocation = ideal.allocation
+            db.session.commit()
+
+            flash('Portfolio rebalanced successfully', category='success')
+            return redirect(url_for('views.dashboard'))
+
         # Get fund ISIN and names from ideal portfolio
         fund_ids = [item.fund_id for item in idealportfolio]
         funds = []
@@ -42,12 +51,13 @@ def dashboard():
                 next(item for item in FUNDS.raw if item["codigoIsin"] == fund)["nombre"])
 
         # Get buy/sell ammounts from the real and ideal allocations
-        realportfolio = RealPortfolio.query.filter_by(user_id=current_user.id).all()
-        buy_sell = [current_user.invested * (ideal.allocation - real.allocation) 
-                    for ideal, real in zip(idealportfolio, realportfolio)]
+        real_allocations = [item.allocation for item in realportfolio]
+        ideal_allocations = [item.allocation for item in idealportfolio]
+        buy_sell = [current_user.invested * (ideal - real)/100 
+                    for ideal, real in zip(ideal_allocations, real_allocations)]
 
         # Get maxiumum percentage difference from all funds
-        max_difference = max([value / current_user.invested for value in buy_sell])
+        max_difference = max([100 *abs(value) / current_user.invested for value in buy_sell])
 
         return render_template("dashboard.html", user=current_user, user_data=zip(funds, names, buy_sell), max_difference=max_difference, real_portfolio_exists=real_portfolio_exists, ideal_portfolio_exists=ideal_portfolio_exists)
 
@@ -94,12 +104,13 @@ def real_portfolio():
                 # Delete relationship between user and funds
                 for item in realportfolio:
                     db.session.delete(item)
+
+                # Set user's invested ammount to NULL
+                current_user.invested = None
                 db.session.commit()
 
                 flash('Portfolio deleted successfully', category='success')
                 return redirect(url_for('views.real_portfolio'))
-
-                return "delete saved real portfolio"
             else:
                 # Show real portfolio
                 return render_template("real-portfolio.html", user=current_user, user_data=zip(funds, names, real_allocations, ideal_allocations), real_portfolio_exists = real_portfolio_exists, ideal_portfolio_exists = ideal_portfolio_exists)
