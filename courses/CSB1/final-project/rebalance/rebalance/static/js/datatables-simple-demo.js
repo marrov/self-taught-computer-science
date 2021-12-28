@@ -6,4 +6,17 @@ window.addEventListener('DOMContentLoaded', event => {
     if (datatablesSimple) {
         new simpleDatatables.DataTable(datatablesSimple);
     }
+
+    const datatablesDynamic = document.getElementById('datatablesDynamic');
+    if (datatablesDynamic) {
+        new simpleDatatables.DataTable(datatablesDynamic, {
+            searchable: false,
+            sortable: false,
+            layout: {
+                top: "",
+                bottom: ""
+            },
+        });
+    }
+
 });
