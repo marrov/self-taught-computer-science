@@ -42,7 +42,7 @@ Real portfolio
                                     <td>{{fund}}</td>
                                     <td>{{ real_allocation|round(2, 'common') }}</td>
                                     <td>{{ ideal_allocation|round(2, 'common') }}</td>
-                                    <td {% if ideal_allocation - real_allocation > 0 %} class="positive" {% else %} class="negative" {% endif %} >{{(ideal_allocation-real_allocation)|round(2, 'common') }}</td>
+                                    <td {% if ideal_allocation - real_allocation > 0 %} class="positive" {% else %} class="negative" {% endif %} > {{(ideal_allocation-real_allocation)|round(2, 'common') }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

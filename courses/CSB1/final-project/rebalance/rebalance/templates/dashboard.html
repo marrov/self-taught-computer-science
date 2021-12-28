@@ -1,7 +1,7 @@
 {% extends "dashboard_layout.html" %}
 
 {% block title %}
-Rebalance
+Dashboard
 {% endblock %}
 
 {% block main %}
@@ -16,40 +16,76 @@ Rebalance
 
     {% if ideal_portfolio_exists and real_portfolio_exists %}
 
-    <div class="row">
-        <div class="col-xl-6">
-            <div class="card bg-success text-white mb-4">
-                <div class="card-body">Ideal portfolio was found!</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{url_for('views.ideal_portfolio')}}">Edit your ideal portfolio</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+        {% if max_difference <= 1 %}
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">Your portfolio is well balanced, congratulations!</div>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-6">
-            <div class="card bg-success text-white mb-4">
-                <div class="card-body">Real portfolio was found!</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{url_for('views.real_portfolio')}}">Edit your real portfolio</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+        {% elif max_difference <= 3 %}
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body">Consider rebalancing your portfolio soon</div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div>        
+
+        {% else %}
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card bg-danger text-white mb-4">
+                    <div class="card-body">You should rebalance your portfolio now</div>
+                </div>
+            </div>
+        </div>   
+
+        {% endif %}
 
     <div class="row">
-        <div class="col-xl-12">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-balance-scale"></i>
-                    Rebalance your portfolio
-                </div>
-                <div class="card-body">
-                    This is a test
+        <form action="/dashboard" method="post">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-balance-scale"></i>
+                        Rebalance your portfolio
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">ISIN</th>
+                                    <th scope="col">Buy / Sell (€)</th>
+                                    <th scope="col">Done?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for fund, name, buy_sell in user_data %}
+                                <tr>
+                                    <td>{{name}}</td>
+                                    <td>{{fund}}</td>
+                                    <td {% if buy_sell > 0 %} class="positive" {% else %} class="negative" {% endif %}> {{ buy_sell|round(2, 'common') }}</td>
+                                    <td> 
+                                        <div>
+                                            <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="..." required>
+                                        </div> 
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
+            <button class="btn btn-primary" type="submit">Rebalance portfolio</button>
+        </form>
     </div>
 
 
