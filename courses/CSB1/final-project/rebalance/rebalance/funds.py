@@ -8,8 +8,12 @@ class Funds:
         self.last_update = time()
         self.raw = requests.get(
             f'https://app.myinvestor.es/myinvestor-server/rest/public/fondos/find-fondos?tipo=TODOS&token={self.__token}').json()
+        self.eur = []
+        for fund in self.raw:
+            if fund['divisasDto']['codigo'] == 'EUR':
+                self.eur.append(fund)
         self.basic = [{'isin': self.eur[i]['codigoIsin'], 
-                       'name': self.eur[i]['nombre']} for i in range(len(self.raw))]
+                       'name': self.eur[i]['nombre']} for i in range(len(self.eur))]
         self.basic.sort(key = lambda e: e['name'])
 
     def update(self):
