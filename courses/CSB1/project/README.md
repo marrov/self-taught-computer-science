@@ -1,0 +1,4 @@
+# Rebalance
+#### Video Demo:  https://youtu.be/vBTHyhAC0q0
+#### Description:
+This project aims to provide a website to track an all-fund portfolio that one can invest in through the Spanish bank MyInvestor. The website is built in python Flask, HTML, and CSS. The Bootstrap framework is used for styling and an online template was employed as a starting point. To store the user and portfolio data, the models are developed in Sqlite 3 using SQLAlchemy. The model implements a simple many-to-many relationship and password security is handled by hashing. The fund data is obtained directly from MyInvestor by interfacing their API with the requests library in python. The response JSON is parsed before inputting the information into a python class which is then employed in the python backend.
