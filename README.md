@@ -8,7 +8,7 @@ The following is a curated list of free courses from reputable universities like
 
 ID | Course | School | Duration | Requirements | Status
 :-- | :--: | :--: | :--: | :--: | :--:
-CSB1 | [CS50's Introduction to Computer Science](https://www.edx.org/course/cs50s-introduction-computer-science-harvardx-cs50x) | Harvard | 6-18 hours/week for 12 weeks | None | On final project
+CSB1 | [CS50's Introduction to Computer Science](https://www.edx.org/course/cs50s-introduction-computer-science-harvardx-cs50x) | Harvard | 6-18 hours/week for 12 weeks | None | [Completed](https://cs50.harvard.edu/certificates/76d0a681-a5a8-44b5-b400-1b607f22bcd1)
 
 ## Programming
 
@@ -16,7 +16,7 @@ CSB1 | [CS50's Introduction to Computer Science](https://www.edx.org/course/cs50
 
 ID | Course | School | Duration | Requirements | Status
 :-- | :--: | :--: | :--: | :--: | :--:
-PC1 | [Java Programming: Solving Problems with Software](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fjava-programming)| Duke | 4 weeks | None | Not started
+PC1 | [Java Programming: Solving Problems with Software](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fjava-programming)| Duke | 4 weeks | None | Started
 PC2 | [Java Programming: Arrays, Lists, and Structured Data](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fjava-programming-arrays-lists-data)| Duke | 4 weeks | PC1 | Not started
 PC3 | [Object Oriented Programming in Java](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fobject-oriented-java)| Duke | 6 weeks | PC2 | Not started
 PC4 | [Data Structures and Performance](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fdata-structures-optimizing-performance)| Duke | 6 weeks | PC3 | Not started
