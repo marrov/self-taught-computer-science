@@ -10,6 +10,8 @@ ID | Course | University | Duration | Requirements | Status
 :-- | :--: | :--: | :--: | :--: | :--:
 CSB1 | [CS50's Introduction to Computer Science](https://www.edx.org/course/cs50s-introduction-computer-science-harvardx-cs50x) | Harvard | 6-18 hours/week for 12 weeks | None | [Completed](https://cs50.harvard.edu/certificates/76d0a681-a5a8-44b5-b400-1b607f22bcd1)
 
+[Final project](https://youtu.be/vBTHyhAC0q0)
+
 ## Programming
 
 ### Core
