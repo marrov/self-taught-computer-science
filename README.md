@@ -51,6 +51,11 @@ T3 | [Algorithms, Part II](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk
 
 ### Distributed Systems
 
+ID | Course | University | Duration | Requirements | Status
+:-- | :--: | :--: | :--: | :--: | :--:
+DS1 | [6.824: Distributed Systems
+](https://pdos.csail.mit.edu/6.824/index.html) | MIT | 12 weeks | To be determined | In progress
+
 ## Applications
 
 ### Core
