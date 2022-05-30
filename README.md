@@ -33,13 +33,23 @@ PO1 | [Programming Languages, Part A](https://click.linksynergy.com/deeplink?id=
 PO2 | [Programming Languages, Part B](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fprogramming-languages-part-b) | UW | 3 weeks | PO1 | Not started
 PO3 | [Programming Languages, Part C](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fprogramming-languages-part-c) | UW | 3 weeks | PO2 | Not started
 
-## Theory
+## Algorithms and Data Structures
 
 ID | Course | University | Duration | Requirements | Status
 :-- | :--: | :--: | :--: | :--: | :--:
 T1 | [Computer Science: Algorithms, Theory, and Machines](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fcs-algorithms-theory-machines) | Princeton | 10 weeks | CSB1 | Not started
 T2 | [Algorithms, Part I](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Falgorithms-part1) | Princeton | 6 weeks | T1 | Not started
 T3 | [Algorithms, Part II](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Falgorithms-part2) | Princeton | 6 weeks | T2 | Not started
+
+## Systems
+
+### Computer Architecture
+
+### Operating Systems
+
+### Networking
+
+### Distributed Systems
 
 ## Applications
 
@@ -56,16 +66,6 @@ ID | Course | University | Duration | Requirements | Status
 :-- | :--: | :--: | :--: | :--: | :--:
 AO1 | [Software Engineering: Introduction](https://www.edx.org/course/software-engineering-introduction-ubcx-softeng1x) | UBCx | 6 weeks | PC6 | Not started
 AO2 | [Cryptography I ](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fcrypto)| Stanford | 7 weeks | None | Not started
-
-## Systems
-
-### Optional
-
-ID | Course | University | Duration | Requirements | Status
-:-- | :--: | :--: | :--: | :--: | :--:
-SO1 | [Build a Modern Computer from First Principles I](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbuild-a-computer) | University of Jerusalem | 6 weeks | CSB1 | Not started
-SO2 | [Build a Modern Computer from First Principles II](https://click.linksynergy.com/deeplink?id=PtFMiHYfEVk&mid=40328&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fnand2tetris2) | University of Jerusalem | 6 weeks | SO1 | Not started
-SO3 | [Introduction to Operating Systems](https://imp.i115008.net/introduction-to-operating-systems)| Georgia Tech | 8 weeks | SO2 | Not started
 
 ## C++
 
